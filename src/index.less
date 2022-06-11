@@ -1,0 +1,101 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+
+  font-family: sans-serif;
+  color: lighten(#161616, 10%);
+}
+body {
+ display: flex;
+ justify-content: center;
+ align-items: flex-start;
+}
+.root {
+  width: 100vw;
+  max-width: 1280px;
+  height: auto;
+}
+
+select {
+  border: none;
+  padding: 5px;
+  background: lighten(black, 15%);
+  color: white;
+  &:caret {
+    display: none;
+  }
+}
+input {
+  background: lighten(black, 15%);
+  padding: 5px 10px;
+  border: none;
+  color: white;
+  transition: background .5s;
+  &:focus {
+    outline: none;
+    border: none;
+    background: lighten(black, 50%);
+    color: black;
+  }
+}
+
+.App {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: flex-start;
+  flex-flow: wrap;
+  background: lighten(black, 80%);
+  .filters {
+    width: 100%;
+    height: auto;
+    padding: 10px 20px;
+    background: lighten(black, 70%);
+    display: flex;
+    flex-flow: nowrap;
+    justify-content: flex-start;
+    .date {
+      margin-left: 10px;
+    }
+  }
+  .stats {
+    width: 100%;
+    min-height: 50vh;
+    height: auto;
+    background: lighten(black, 80%);
+    display: flex;
+    align-items: center;
+    flex-flow: nowrap;
+    padding-bottom: 10px;
+  }
+  .client {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    background: lighten(black, 74%);
+    .noData {
+     text-align: center;
+    }
+    table {
+      width: 100%;
+      tbody:last-child {
+        border-bottom: 1px solid rgba(0,0,0,0.2);
+      }
+      th {
+        border-bottom: 1px solid rgba(0,0,0,.2);
+      }
+      th, td {
+        width: 25%;
+        padding: 5px;
+        text-align: center;
+        border-left: 1px solid #191919;
+      }
+      tr td:last-child, tr th:last-child {
+        border-right: 1px solid #191919;
+      }
+    }
+  }
+}

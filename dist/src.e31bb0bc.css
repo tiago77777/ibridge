@@ -1,0 +1,131 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  color: #303030;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.root {
+  width: 100vw;
+  max-width: 1280px;
+  height: auto;
+}
+select {
+  border: none;
+  padding: 5px;
+  background: #262626;
+  color: white;
+}
+select:caret {
+  display: none;
+}
+input {
+  background: #262626;
+  padding: 5px 10px;
+  border: none;
+  color: white;
+  transition: background 0.5s;
+}
+input:focus {
+  outline: none;
+  border: none;
+  background: #808080;
+  color: black;
+}
+.App {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: flex-start;
+  flex-flow: wrap;
+  background: #cccccc;
+}
+.App .filters {
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
+  background: #b3b3b3;
+  display: flex;
+  flex-flow: nowrap;
+  justify-content: flex-start;
+}
+.App .filters .date {
+  margin-left: 10px;
+}
+.App .stats {
+  width: 100%;
+  min-height: 50vh;
+  height: auto;
+  background: #cccccc;
+  display: flex;
+  align-items: center;
+  flex-flow: nowrap;
+  padding-bottom: 10px;
+}
+.App .client {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  background: #bdbdbd;
+}
+.App .client .noData {
+  text-align: center;
+}
+.App .client table {
+  width: 100%;
+}
+.App .client table tbody:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.App .client table th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.App .client table th,
+.App .client table td {
+  width: 25%;
+  padding: 5px;
+  text-align: center;
+  border-left: 1px solid #191919;
+}
+.App .client table tr td:last-child,
+.App .client table tr th:last-child {
+  border-right: 1px solid #191919;
+}
+
+.chart canvas {
+  position: relative;
+}
+
+.SmallLoading {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.SmallLoading .spinner {
+  width: 20px;
+  height: 20px;
+  border: 15px solid black;
+  border-left: 15px solid transparent;
+  border-radius: 100%;
+  animation: spinner 0.5s linear infinite;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/*# sourceMappingURL=/src.e31bb0bc.css.map */
