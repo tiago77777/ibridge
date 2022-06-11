@@ -49,12 +49,10 @@ async function init() {
   await db.connect(sqliteStrategy);
 
   let callData = await getCallData();
-  // console.log({callData})
   db.insertCallData(callData);
 
   //{allColumns}}
   app.get('/getClientsByDate/:date', async (req,res) => {
-   console.log("ASDSADSAD", req.params, Object.keys(req))
     let result = await db.getClientsByDate(req.params.date);
     if (result.status === "ERR")
       return res.status(500).send({status: "ERR", message: "Failed to get clients by date"});

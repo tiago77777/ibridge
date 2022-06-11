@@ -63,16 +63,16 @@ class State {
 	 }
 	}
 	getDailyCalls() {
-	 let stats = {labels:[]};
+	 let stats = {labels:[],data:[]};
 	 let data = [];
 	 let startDate = (new Date(state.currentDate)).getTime();
-	 this.stats.map(stat => {
+	 stats.data = this.stats.map(stat => {
 	  let dateStr = stat.data.split(' ')[0];
 	  let date = new Date(dateStr).getTime();
 	  if (date < startDate)
 	   return null;
    stats.labels.push(dateStr)
-   return data.push(stat.chamadas_total);
+   return stat.chamadas_total;
   })
   return stats;
 	}
@@ -102,7 +102,6 @@ class State {
 	   return toast.show(err.message);
 	  }
 	  this.clients = res.data;
-	  console.log("clients", JSON.stringify(res.data,null,2))
 	  this.fetchingClients = false;
 	 }))
 	}
@@ -115,8 +114,6 @@ class State {
 		})
 		this.currentStat = stat;
 		this.clientsToSelect = stat.clientes.split(',');
-		console.log('stat', JSON.stringify(this.clientsToSelect))
-		// console.log('CURRENT STAT',this.currentStat, this.clientsToSelect)
 	}
 }
 

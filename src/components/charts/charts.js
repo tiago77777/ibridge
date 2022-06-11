@@ -12,11 +12,15 @@ export const DailyCallsChart = () => {
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {
+          labels: data.labels,
           datasets: [{
               label: 'Chamadas por dia',
               data: data.data,
           }],
         },
+        options: {
+         responsive: true
+        }
     });
     return () => {
       myChart.destroy();
@@ -30,7 +34,7 @@ export const DailyCallsChart = () => {
 }
 
 export const OcurrenciesChart = () => {
-    const id = Math.random() + 2;
+    const id = Math.random() + 4;
     let data = state.getOcurrencies();
     useEffect(() => {
       const ctx = document.getElementById(id);
@@ -39,12 +43,9 @@ export const OcurrenciesChart = () => {
           data: {
               labels: data.labels,
               datasets: [{
-                  label: 'Test',
+                label:'',
                   data: data.data,
                   backgroundColor: ['red','green','blue','yellow','pink'],
-                  borderColor: [
-                      'rgba(0,0,0, .5)',
-                  ],
               }]
           },
           options: {
@@ -70,7 +71,6 @@ export const OcurrenciesChart = () => {
 export const ClassificationsChart = () => {
     const id = Math.random() + 2;
     const data = state.getClassificationsData();
-    console.log('data',JSON.stringify(data))
     useEffect(() => {
       const ctx = document.getElementById(id);
       const myChart = new Chart(ctx, {

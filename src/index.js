@@ -12,6 +12,7 @@ import {
 import state from "./state/state.global.js"
 import {SmallLoading} from "./components/loading/loading.js"
 import {ToastContainer} from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = observer(() => {
     let [dateMessage, setDateMessage] = useState("");
@@ -21,7 +22,6 @@ const App = observer(() => {
     const handleDateChange = action((event) => {
       let date = event.currentTarget.value;
       if (state.availableDates.includes(date)) {
-        console.log("HANDLE DATE CHANGE", date);
         state.currentDate = date;
         state.selectStat(date);
         setDateMessage("")
@@ -35,8 +35,6 @@ const App = observer(() => {
     }
     useEffect(() => {
       state.getStats();
-      setTimeout(() => toast("HELLO WORLD"))
-      
       return () => {}
     }, [])
     return (
@@ -88,7 +86,6 @@ const App = observer(() => {
                     { 
                      !!state.clients ? (
                         state.clients.map(client => {
-                          console.log('??',state.currentClient, JSON.stringify(client,null,2))
                            if (client.id !== state.currentClient && state.currentClient != '')
                             return null;
                            return (

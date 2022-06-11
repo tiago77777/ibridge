@@ -70357,16 +70357,17 @@ var State = (_class = /*#__PURE__*/function () {
     key: "getDailyCalls",
     value: function getDailyCalls() {
       var stats = {
-        labels: []
+        labels: [],
+        data: []
       };
       var data = [];
       var startDate = new Date(state.currentDate).getTime();
-      this.stats.map(function (stat) {
+      stats.data = this.stats.map(function (stat) {
         var dateStr = stat.data.split(' ')[0];
         var date = new Date(dateStr).getTime();
         if (date < startDate) return null;
         stats.labels.push(dateStr);
-        return data.push(stat.chamadas_total);
+        return stat.chamadas_total;
       });
       return stats;
     }
@@ -70407,7 +70408,6 @@ var State = (_class = /*#__PURE__*/function () {
         }
 
         _this2.clients = res.data;
-        console.log("clients", JSON.stringify(res.data, null, 2));
         _this2.fetchingClients = false;
       }));
     }
@@ -70421,7 +70421,6 @@ var State = (_class = /*#__PURE__*/function () {
       });
       this.currentStat = stat;
       this.clientsToSelect = stat.clientes.split(',');
-      console.log('stat', JSON.stringify(this.clientsToSelect)); // console.log('CURRENT STAT',this.currentStat, this.clientsToSelect)
     }
   }]);
 
@@ -70518,10 +70517,14 @@ var DailyCallsChart = function DailyCallsChart() {
     var myChart = new _auto.default(ctx, {
       type: 'line',
       data: {
+        labels: data.labels,
         datasets: [{
           label: 'Chamadas por dia',
           data: data.data
         }]
+      },
+      options: {
+        responsive: true
       }
     });
     return function () {
@@ -70543,7 +70546,7 @@ var DailyCallsChart = function DailyCallsChart() {
 exports.DailyCallsChart = DailyCallsChart;
 
 var OcurrenciesChart = function OcurrenciesChart() {
-  var id = Math.random() + 2;
+  var id = Math.random() + 4;
 
   var data = _stateGlobal.default.getOcurrencies();
 
@@ -70554,10 +70557,9 @@ var OcurrenciesChart = function OcurrenciesChart() {
       data: {
         labels: data.labels,
         datasets: [{
-          label: 'Test',
+          label: '',
           data: data.data,
-          backgroundColor: ['red', 'green', 'blue', 'yellow', 'pink'],
-          borderColor: ['rgba(0,0,0, .5)']
+          backgroundColor: ['red', 'green', 'blue', 'yellow', 'pink']
         }]
       },
       options: {
@@ -70591,7 +70593,6 @@ var ClassificationsChart = function ClassificationsChart() {
 
   var data = _stateGlobal.default.getClassificationsData();
 
-  console.log('data', JSON.stringify(data));
   (0, _react.useEffect)(function () {
     var ctx = document.getElementById(id);
     var myChart = new _auto.default(ctx, {
@@ -70652,7 +70653,954 @@ var SmallLoading = function SmallLoading() {
 };
 
 exports.SmallLoading = SmallLoading;
-},{"react":"../node_modules/react/index.js","./loading.less":"components/loading/loading.less"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./loading.less":"components/loading/loading.less"}],"../node_modules/clsx/dist/clsx.m.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function toVal(mix) {
+  var k,
+      y,
+      str = '';
+
+  if (typeof mix === 'string' || typeof mix === 'number') {
+    str += mix;
+  } else if (_typeof(mix) === 'object') {
+    if (Array.isArray(mix)) {
+      for (k = 0; k < mix.length; k++) {
+        if (mix[k]) {
+          if (y = toVal(mix[k])) {
+            str && (str += ' ');
+            str += y;
+          }
+        }
+      }
+    } else {
+      for (k in mix) {
+        if (mix[k]) {
+          str && (str += ' ');
+          str += k;
+        }
+      }
+    }
+  }
+
+  return str;
+}
+
+function _default() {
+  var i = 0,
+      tmp,
+      x,
+      str = '';
+
+  while (i < arguments.length) {
+    if (tmp = arguments[i++]) {
+      if (x = toVal(tmp)) {
+        str && (str += ' ');
+        str += x;
+      }
+    }
+  }
+
+  return str;
+}
+},{}],"../node_modules/react-toastify/dist/react-toastify.esm.mjs":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Zoom = exports.ToastContainer = exports.Slide = exports.Icons = exports.Flip = exports.Bounce = void 0;
+exports.collapseToast = v;
+exports.cssTransition = E;
+exports.toast = W;
+exports.useToast = P;
+exports.useToastContainer = O;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function u(e) {
+  return "number" == typeof e && !isNaN(e);
+}
+
+function d(e) {
+  return "boolean" == typeof e;
+}
+
+function p(e) {
+  return "string" == typeof e;
+}
+
+function m(e) {
+  return "function" == typeof e;
+}
+
+function f(e) {
+  return p(e) || m(e) ? e : null;
+}
+
+function g(e) {
+  return 0 === e || e;
+}
+
+function y(e) {
+  return (0, _react.isValidElement)(e) || p(e) || m(e) || u(e);
+}
+
+const h = {
+  TOP_LEFT: "top-left",
+  TOP_RIGHT: "top-right",
+  TOP_CENTER: "top-center",
+  BOTTOM_LEFT: "bottom-left",
+  BOTTOM_RIGHT: "bottom-right",
+  BOTTOM_CENTER: "bottom-center"
+},
+      T = {
+  INFO: "info",
+  SUCCESS: "success",
+  WARNING: "warning",
+  ERROR: "error",
+  DEFAULT: "default"
+};
+
+function v(e, t, n) {
+  void 0 === n && (n = 300);
+  const {
+    scrollHeight: o,
+    style: s
+  } = e;
+  requestAnimationFrame(() => {
+    s.minHeight = "initial", s.height = o + "px", s.transition = "all " + n + "ms", requestAnimationFrame(() => {
+      s.height = "0", s.padding = "0", s.margin = "0", setTimeout(t, n);
+    });
+  });
+}
+
+function E(t) {
+  let {
+    enter: a,
+    exit: r,
+    appendPosition: i = !1,
+    collapse: c = !0,
+    collapseDuration: l = 300
+  } = t;
+  return function (t) {
+    let {
+      children: u,
+      position: d,
+      preventExitTransition: p,
+      done: m,
+      nodeRef: f,
+      isIn: g
+    } = t;
+    const y = i ? a + "--" + d : a,
+          h = i ? r + "--" + d : r,
+          T = (0, _react.useRef)(),
+          E = (0, _react.useRef)(0);
+
+    function b(e) {
+      if (e.target !== f.current) return;
+      const t = f.current;
+      t.dispatchEvent(new Event("d")), t.removeEventListener("animationend", b), t.removeEventListener("animationcancel", b), 0 === E.current && "animationcancel" !== e.type && (t.className = T.current);
+    }
+
+    function C() {
+      const e = f.current;
+      e.removeEventListener("animationend", C), c ? v(e, m, l) : m();
+    }
+
+    return (0, _react.useLayoutEffect)(() => {
+      !function () {
+        const e = f.current;
+        T.current = e.className, e.className += " " + y, e.addEventListener("animationend", b), e.addEventListener("animationcancel", b);
+      }();
+    }, []), (0, _react.useEffect)(() => {
+      g || (p ? C() : function () {
+        E.current = 1;
+        const e = f.current;
+        e.className += " " + h, e.addEventListener("animationend", C);
+      }());
+    }, [g]), _react.default.createElement(_react.default.Fragment, null, u);
+  };
+}
+
+function b(e, t) {
+  return {
+    content: e.content,
+    containerId: e.props.containerId,
+    id: e.props.toastId,
+    theme: e.props.theme,
+    type: e.props.type,
+    data: e.props.data || {},
+    isLoading: e.props.isLoading,
+    icon: e.props.icon,
+    status: t
+  };
+}
+
+const C = {
+  list: new Map(),
+  emitQueue: new Map(),
+
+  on(e, t) {
+    return this.list.has(e) || this.list.set(e, []), this.list.get(e).push(t), this;
+  },
+
+  off(e, t) {
+    if (t) {
+      const n = this.list.get(e).filter(e => e !== t);
+      return this.list.set(e, n), this;
+    }
+
+    return this.list.delete(e), this;
+  },
+
+  cancelEmit(e) {
+    const t = this.emitQueue.get(e);
+    return t && (t.forEach(clearTimeout), this.emitQueue.delete(e)), this;
+  },
+
+  emit(e) {
+    this.list.has(e) && this.list.get(e).forEach(t => {
+      const n = setTimeout(() => {
+        t(...[].slice.call(arguments, 1));
+      }, 0);
+      this.emitQueue.has(e) || this.emitQueue.set(e, []), this.emitQueue.get(e).push(n);
+    });
+  }
+
+},
+      _ = t => {
+  let {
+    theme: n,
+    type: o,
+    ...s
+  } = t;
+  return _react.default.createElement("svg", {
+    viewBox: "0 0 24 24",
+    width: "100%",
+    height: "100%",
+    fill: "colored" === n ? "currentColor" : "var(--toastify-icon-color-" + o + ")",
+    ...s
+  });
+},
+      I = {
+  info: function (t) {
+    return _react.default.createElement(_, { ...t
+    }, _react.default.createElement("path", {
+      d: "M12 0a12 12 0 1012 12A12.013 12.013 0 0012 0zm.25 5a1.5 1.5 0 11-1.5 1.5 1.5 1.5 0 011.5-1.5zm2.25 13.5h-4a1 1 0 010-2h.75a.25.25 0 00.25-.25v-4.5a.25.25 0 00-.25-.25h-.75a1 1 0 010-2h1a2 2 0 012 2v4.75a.25.25 0 00.25.25h.75a1 1 0 110 2z"
+    }));
+  },
+  warning: function (t) {
+    return _react.default.createElement(_, { ...t
+    }, _react.default.createElement("path", {
+      d: "M23.32 17.191L15.438 2.184C14.728.833 13.416 0 11.996 0c-1.42 0-2.733.833-3.443 2.184L.533 17.448a4.744 4.744 0 000 4.368C1.243 23.167 2.555 24 3.975 24h16.05C22.22 24 24 22.044 24 19.632c0-.904-.251-1.746-.68-2.44zm-9.622 1.46c0 1.033-.724 1.823-1.698 1.823s-1.698-.79-1.698-1.822v-.043c0-1.028.724-1.822 1.698-1.822s1.698.79 1.698 1.822v.043zm.039-12.285l-.84 8.06c-.057.581-.408.943-.897.943-.49 0-.84-.367-.896-.942l-.84-8.065c-.057-.624.25-1.095.779-1.095h1.91c.528.005.84.476.784 1.1z"
+    }));
+  },
+  success: function (t) {
+    return _react.default.createElement(_, { ...t
+    }, _react.default.createElement("path", {
+      d: "M12 0a12 12 0 1012 12A12.014 12.014 0 0012 0zm6.927 8.2l-6.845 9.289a1.011 1.011 0 01-1.43.188l-4.888-3.908a1 1 0 111.25-1.562l4.076 3.261 6.227-8.451a1 1 0 111.61 1.183z"
+    }));
+  },
+  error: function (t) {
+    return _react.default.createElement(_, { ...t
+    }, _react.default.createElement("path", {
+      d: "M11.983 0a12.206 12.206 0 00-8.51 3.653A11.8 11.8 0 000 12.207 11.779 11.779 0 0011.8 24h.214A12.111 12.111 0 0024 11.791 11.766 11.766 0 0011.983 0zM10.5 16.542a1.476 1.476 0 011.449-1.53h.027a1.527 1.527 0 011.523 1.47 1.475 1.475 0 01-1.449 1.53h-.027a1.529 1.529 0 01-1.523-1.47zM11 12.5v-6a1 1 0 012 0v6a1 1 0 11-2 0z"
+    }));
+  },
+  spinner: function () {
+    return _react.default.createElement("div", {
+      className: "Toastify__spinner"
+    });
+  }
+};
+
+exports.Icons = I;
+
+function O(e) {
+  const [, o] = (0, _react.useReducer)(e => e + 1, 0),
+        [c, l] = (0, _react.useState)([]),
+        h = (0, _react.useRef)(null),
+        T = (0, _react.useRef)(new Map()).current,
+        v = e => -1 !== c.indexOf(e),
+        E = (0, _react.useRef)({
+    toastKey: 1,
+    displayedToast: 0,
+    count: 0,
+    queue: [],
+    props: e,
+    containerId: null,
+    isToastActive: v,
+    getToast: e => T.get(e)
+  }).current;
+
+  function _(e) {
+    let {
+      containerId: t
+    } = e;
+    const {
+      limit: n
+    } = E.props;
+    !n || t && E.containerId !== t || (E.count -= E.queue.length, E.queue = []);
+  }
+
+  function O(e) {
+    l(t => g(e) ? t.filter(t => t !== e) : []);
+  }
+
+  function L() {
+    const {
+      toastContent: e,
+      toastProps: t,
+      staleId: n
+    } = E.queue.shift();
+    P(e, t, n);
+  }
+
+  function N(e, n) {
+    let {
+      delay: s,
+      staleId: r,
+      ...i
+    } = n;
+    if (!y(e) || function (e) {
+      return !h.current || E.props.enableMultiContainer && e.containerId !== E.props.containerId || T.has(e.toastId) && null == e.updateId;
+    }(i)) return;
+
+    const {
+      toastId: c,
+      updateId: l,
+      data: v
+    } = i,
+          {
+      props: _
+    } = E,
+          N = () => O(c),
+          x = null == l;
+
+    x && E.count++;
+    const R = {
+      toastId: c,
+      updateId: l,
+      data: v,
+      containerId: i.containerId,
+      isLoading: i.isLoading,
+      theme: i.theme || _.theme,
+      icon: null != i.icon ? i.icon : _.icon,
+      isIn: !1,
+      key: i.key || E.toastKey++,
+      type: i.type,
+      closeToast: N,
+      closeButton: i.closeButton,
+      rtl: _.rtl,
+      position: i.position || _.position,
+      transition: i.transition || _.transition,
+      className: f(i.className || _.toastClassName),
+      bodyClassName: f(i.bodyClassName || _.bodyClassName),
+      style: i.style || _.toastStyle,
+      bodyStyle: i.bodyStyle || _.bodyStyle,
+      onClick: i.onClick || _.onClick,
+      pauseOnHover: d(i.pauseOnHover) ? i.pauseOnHover : _.pauseOnHover,
+      pauseOnFocusLoss: d(i.pauseOnFocusLoss) ? i.pauseOnFocusLoss : _.pauseOnFocusLoss,
+      draggable: d(i.draggable) ? i.draggable : _.draggable,
+      draggablePercent: i.draggablePercent || _.draggablePercent,
+      draggableDirection: i.draggableDirection || _.draggableDirection,
+      closeOnClick: d(i.closeOnClick) ? i.closeOnClick : _.closeOnClick,
+      progressClassName: f(i.progressClassName || _.progressClassName),
+      progressStyle: i.progressStyle || _.progressStyle,
+      autoClose: !i.isLoading && (k = i.autoClose, B = _.autoClose, !1 === k || u(k) && k > 0 ? k : B),
+      hideProgressBar: d(i.hideProgressBar) ? i.hideProgressBar : _.hideProgressBar,
+      progress: i.progress,
+      role: i.role || _.role,
+
+      deleteToast() {
+        const e = b(T.get(c), "removed");
+        T.delete(c), C.emit(4, e);
+        const t = E.queue.length;
+
+        if (E.count = g(c) ? E.count - 1 : E.count - E.displayedToast, E.count < 0 && (E.count = 0), t > 0) {
+          const e = g(c) ? 1 : E.props.limit;
+          if (1 === t || 1 === e) E.displayedToast++, L();else {
+            const n = e > t ? t : e;
+            E.displayedToast = n;
+
+            for (let e = 0; e < n; e++) L();
+          }
+        } else o();
+      }
+
+    };
+    var k, B;
+    R.iconOut = function (e) {
+      let {
+        theme: n,
+        type: o,
+        isLoading: s,
+        icon: r
+      } = e,
+          i = null;
+      const c = {
+        theme: n,
+        type: o
+      };
+      return !1 === r || (m(r) ? i = r(c) : (0, _react.isValidElement)(r) ? i = (0, _react.cloneElement)(r, c) : p(r) || u(r) ? i = r : s ? i = I.spinner() : (e => e in I)(o) && (i = I[o](c))), i;
+    }(R), m(i.onOpen) && (R.onOpen = i.onOpen), m(i.onClose) && (R.onClose = i.onClose), R.closeButton = _.closeButton, !1 === i.closeButton || y(i.closeButton) ? R.closeButton = i.closeButton : !0 === i.closeButton && (R.closeButton = !y(_.closeButton) || _.closeButton);
+    let M = e;
+    (0, _react.isValidElement)(e) && !p(e.type) ? M = (0, _react.cloneElement)(e, {
+      closeToast: N,
+      toastProps: R,
+      data: v
+    }) : m(e) && (M = e({
+      closeToast: N,
+      toastProps: R,
+      data: v
+    })), _.limit && _.limit > 0 && E.count > _.limit && x ? E.queue.push({
+      toastContent: M,
+      toastProps: R,
+      staleId: r
+    }) : u(s) ? setTimeout(() => {
+      P(M, R, r);
+    }, s) : P(M, R, r);
+  }
+
+  function P(e, t, n) {
+    const {
+      toastId: o
+    } = t;
+    n && T.delete(n);
+    const s = {
+      content: e,
+      props: t
+    };
+    T.set(o, s), l(e => [...e, o].filter(e => e !== n)), C.emit(4, b(s, null == s.props.updateId ? "added" : "updated"));
+  }
+
+  return (0, _react.useEffect)(() => (E.containerId = e.containerId, C.cancelEmit(3).on(0, N).on(1, e => h.current && O(e)).on(5, _).emit(2, E), () => C.emit(3, E)), []), (0, _react.useEffect)(() => {
+    E.props = e, E.isToastActive = v, E.displayedToast = c.length;
+  }), {
+    getToastToRender: function (t) {
+      const n = new Map(),
+            o = Array.from(T.values());
+      return e.newestOnTop && o.reverse(), o.forEach(e => {
+        const {
+          position: t
+        } = e.props;
+        n.has(t) || n.set(t, []), n.get(t).push(e);
+      }), Array.from(n, e => t(e[0], e[1]));
+    },
+    containerRef: h,
+    isToastActive: v
+  };
+}
+
+function L(e) {
+  return e.targetTouches && e.targetTouches.length >= 1 ? e.targetTouches[0].clientX : e.clientX;
+}
+
+function N(e) {
+  return e.targetTouches && e.targetTouches.length >= 1 ? e.targetTouches[0].clientY : e.clientY;
+}
+
+function P(e) {
+  const [o, a] = (0, _react.useState)(!1),
+        [r, c] = (0, _react.useState)(!1),
+        l = (0, _react.useRef)(null),
+        u = (0, _react.useRef)({
+    start: 0,
+    x: 0,
+    y: 0,
+    delta: 0,
+    removalDistance: 0,
+    canCloseOnClick: !0,
+    canDrag: !1,
+    boundingRect: null,
+    didMove: !1
+  }).current,
+        d = (0, _react.useRef)(e),
+        {
+    autoClose: p,
+    pauseOnHover: f,
+    closeToast: g,
+    onClick: y,
+    closeOnClick: h
+  } = e;
+
+  function T(t) {
+    if (e.draggable) {
+      u.didMove = !1, document.addEventListener("mousemove", C), document.addEventListener("mouseup", _), document.addEventListener("touchmove", C), document.addEventListener("touchend", _);
+      const n = l.current;
+      u.canCloseOnClick = !0, u.canDrag = !0, u.boundingRect = n.getBoundingClientRect(), n.style.transition = "", u.x = L(t.nativeEvent), u.y = N(t.nativeEvent), "x" === e.draggableDirection ? (u.start = u.x, u.removalDistance = n.offsetWidth * (e.draggablePercent / 100)) : (u.start = u.y, u.removalDistance = n.offsetHeight * (80 === e.draggablePercent ? 1.5 * e.draggablePercent : e.draggablePercent / 100));
+    }
+  }
+
+  function v() {
+    if (u.boundingRect) {
+      const {
+        top: t,
+        bottom: n,
+        left: o,
+        right: s
+      } = u.boundingRect;
+      e.pauseOnHover && u.x >= o && u.x <= s && u.y >= t && u.y <= n ? b() : E();
+    }
+  }
+
+  function E() {
+    a(!0);
+  }
+
+  function b() {
+    a(!1);
+  }
+
+  function C(t) {
+    const n = l.current;
+    u.canDrag && n && (u.didMove = !0, o && b(), u.x = L(t), u.y = N(t), u.delta = "x" === e.draggableDirection ? u.x - u.start : u.y - u.start, u.start !== u.x && (u.canCloseOnClick = !1), n.style.transform = "translate" + e.draggableDirection + "(" + u.delta + "px)", n.style.opacity = "" + (1 - Math.abs(u.delta / u.removalDistance)));
+  }
+
+  function _() {
+    document.removeEventListener("mousemove", C), document.removeEventListener("mouseup", _), document.removeEventListener("touchmove", C), document.removeEventListener("touchend", _);
+    const t = l.current;
+
+    if (u.canDrag && u.didMove && t) {
+      if (u.canDrag = !1, Math.abs(u.delta) > u.removalDistance) return c(!0), void e.closeToast();
+      t.style.transition = "transform 0.2s, opacity 0.2s", t.style.transform = "translate" + e.draggableDirection + "(0)", t.style.opacity = "1";
+    }
+  }
+
+  (0, _react.useEffect)(() => {
+    d.current = e;
+  }), (0, _react.useEffect)(() => (l.current && l.current.addEventListener("d", E, {
+    once: !0
+  }), m(e.onOpen) && e.onOpen((0, _react.isValidElement)(e.children) && e.children.props), () => {
+    const e = d.current;
+    m(e.onClose) && e.onClose((0, _react.isValidElement)(e.children) && e.children.props);
+  }), []), (0, _react.useEffect)(() => (e.pauseOnFocusLoss && (document.hasFocus() || b(), window.addEventListener("focus", E), window.addEventListener("blur", b)), () => {
+    e.pauseOnFocusLoss && (window.removeEventListener("focus", E), window.removeEventListener("blur", b));
+  }), [e.pauseOnFocusLoss]);
+  const I = {
+    onMouseDown: T,
+    onTouchStart: T,
+    onMouseUp: v,
+    onTouchEnd: v
+  };
+  return p && f && (I.onMouseEnter = b, I.onMouseLeave = E), h && (I.onClick = e => {
+    y && y(e), u.canCloseOnClick && g();
+  }), {
+    playToast: E,
+    pauseToast: b,
+    isRunning: o,
+    preventExitTransition: r,
+    toastRef: l,
+    eventHandlers: I
+  };
+}
+
+function x(t) {
+  let {
+    closeToast: n,
+    theme: o,
+    ariaLabel: s = "close"
+  } = t;
+  return _react.default.createElement("button", {
+    className: "Toastify__close-button Toastify__close-button--" + o,
+    type: "button",
+    onClick: e => {
+      e.stopPropagation(), n(e);
+    },
+    "aria-label": s
+  }, _react.default.createElement("svg", {
+    "aria-hidden": "true",
+    viewBox: "0 0 14 16"
+  }, _react.default.createElement("path", {
+    fillRule: "evenodd",
+    d: "M7.71 8.23l3.75 3.75-1.48 1.48-3.75-3.75-3.75 3.75L1 11.98l3.75-3.75L1 4.48 2.48 3l3.75 3.75L9.98 3l1.48 1.48-3.75 3.75z"
+  })));
+}
+
+function R(t) {
+  let {
+    delay: n,
+    isRunning: o,
+    closeToast: s,
+    type: a,
+    hide: r,
+    className: i,
+    style: c,
+    controlledProgress: u,
+    progress: d,
+    rtl: p,
+    isIn: f,
+    theme: g
+  } = t;
+  const y = { ...c,
+    animationDuration: n + "ms",
+    animationPlayState: o ? "running" : "paused",
+    opacity: r ? 0 : 1
+  };
+  u && (y.transform = "scaleX(" + d + ")");
+  const h = (0, _clsx.default)("Toastify__progress-bar", u ? "Toastify__progress-bar--controlled" : "Toastify__progress-bar--animated", "Toastify__progress-bar-theme--" + g, "Toastify__progress-bar--" + a, {
+    "Toastify__progress-bar--rtl": p
+  }),
+        T = m(i) ? i({
+    rtl: p,
+    type: a,
+    defaultClassName: h
+  }) : (0, _clsx.default)(h, i);
+  return _react.default.createElement("div", {
+    role: "progressbar",
+    "aria-hidden": r ? "true" : "false",
+    "aria-label": "notification timer",
+    className: T,
+    style: y,
+    [u && d >= 1 ? "onTransitionEnd" : "onAnimationEnd"]: u && d < 1 ? null : () => {
+      f && s();
+    }
+  });
+}
+
+R.defaultProps = {
+  type: T.DEFAULT,
+  hide: !1
+};
+
+const k = t => {
+  const {
+    isRunning: n,
+    preventExitTransition: o,
+    toastRef: s,
+    eventHandlers: a
+  } = P(t),
+        {
+    closeButton: r,
+    children: i,
+    autoClose: c,
+    onClick: u,
+    type: d,
+    hideProgressBar: p,
+    closeToast: f,
+    transition: g,
+    position: y,
+    className: h,
+    style: T,
+    bodyClassName: v,
+    bodyStyle: E,
+    progressClassName: b,
+    progressStyle: C,
+    updateId: _,
+    role: I,
+    progress: O,
+    rtl: L,
+    toastId: N,
+    deleteToast: k,
+    isIn: B,
+    isLoading: M,
+    iconOut: D,
+    theme: w
+  } = t,
+        A = (0, _clsx.default)("Toastify__toast", "Toastify__toast-theme--" + w, "Toastify__toast--" + d, {
+    "Toastify__toast--rtl": L
+  }),
+        F = m(h) ? h({
+    rtl: L,
+    position: y,
+    type: d,
+    defaultClassName: A
+  }) : (0, _clsx.default)(A, h),
+        S = !!O,
+        z = {
+    closeToast: f,
+    type: d,
+    theme: w
+  };
+  let H = null;
+  return !1 === r || (H = m(r) ? r(z) : _react.default.isValidElement(r) ? _react.default.cloneElement(r, z) : x(z)), _react.default.createElement(g, {
+    isIn: B,
+    done: k,
+    position: y,
+    preventExitTransition: o,
+    nodeRef: s
+  }, _react.default.createElement("div", {
+    id: N,
+    onClick: u,
+    className: F,
+    ...a,
+    style: T,
+    ref: s
+  }, _react.default.createElement("div", { ...(B && {
+      role: I
+    }),
+    className: m(v) ? v({
+      type: d
+    }) : (0, _clsx.default)("Toastify__toast-body", v),
+    style: E
+  }, null != D && _react.default.createElement("div", {
+    className: (0, _clsx.default)("Toastify__toast-icon", {
+      "Toastify--animate-icon Toastify__zoom-enter": !M
+    })
+  }, D), _react.default.createElement("div", null, i)), H, (c || S) && _react.default.createElement(R, { ...(_ && !S ? {
+      key: "pb-" + _
+    } : {}),
+    rtl: L,
+    theme: w,
+    delay: c,
+    isRunning: n,
+    isIn: B,
+    closeToast: f,
+    hide: p,
+    type: d,
+    style: C,
+    className: b,
+    controlledProgress: S,
+    progress: O
+  })));
+},
+      B = E({
+  enter: "Toastify--animate Toastify__bounce-enter",
+  exit: "Toastify--animate Toastify__bounce-exit",
+  appendPosition: !0
+}),
+      M = E({
+  enter: "Toastify--animate Toastify__slide-enter",
+  exit: "Toastify--animate Toastify__slide-exit",
+  appendPosition: !0
+}),
+      D = E({
+  enter: "Toastify--animate Toastify__zoom-enter",
+  exit: "Toastify--animate Toastify__zoom-exit"
+}),
+      w = E({
+  enter: "Toastify--animate Toastify__flip-enter",
+  exit: "Toastify--animate Toastify__flip-exit"
+}),
+      A = (0, _react.forwardRef)((t, n) => {
+  const {
+    getToastToRender: o,
+    containerRef: a,
+    isToastActive: r
+  } = O(t),
+        {
+    className: i,
+    style: c,
+    rtl: u,
+    containerId: d
+  } = t;
+
+  function p(e) {
+    const t = (0, _clsx.default)("Toastify__toast-container", "Toastify__toast-container--" + e, {
+      "Toastify__toast-container--rtl": u
+    });
+    return m(i) ? i({
+      position: e,
+      rtl: u,
+      defaultClassName: t
+    }) : (0, _clsx.default)(t, f(i));
+  }
+
+  return (0, _react.useEffect)(() => {
+    n && (n.current = a.current);
+  }, []), _react.default.createElement("div", {
+    ref: a,
+    className: "Toastify",
+    id: d
+  }, o((t, n) => {
+    const o = n.length ? { ...c
+    } : { ...c,
+      pointerEvents: "none"
+    };
+    return _react.default.createElement("div", {
+      className: p(t),
+      style: o,
+      key: "container-" + t
+    }, n.map((t, o) => {
+      let {
+        content: s,
+        props: a
+      } = t;
+      return _react.default.createElement(k, { ...a,
+        isIn: r(a.toastId),
+        style: { ...a.style,
+          "--nth": o + 1,
+          "--len": n.length
+        },
+        key: "toast-" + a.key
+      }, s);
+    }));
+  }));
+});
+
+exports.ToastContainer = A;
+exports.Flip = w;
+exports.Zoom = D;
+exports.Slide = M;
+exports.Bounce = B;
+A.displayName = "ToastContainer", A.defaultProps = {
+  position: h.TOP_RIGHT,
+  transition: B,
+  rtl: !1,
+  autoClose: 5e3,
+  hideProgressBar: !1,
+  closeButton: x,
+  pauseOnHover: !0,
+  pauseOnFocusLoss: !0,
+  closeOnClick: !0,
+  newestOnTop: !1,
+  draggable: !0,
+  draggablePercent: 80,
+  draggableDirection: "x",
+  role: "alert",
+  theme: "light"
+};
+let F,
+    S = new Map(),
+    z = [];
+
+function H() {
+  return Math.random().toString(36).substring(2, 9);
+}
+
+function q(e) {
+  return e && (p(e.toastId) || u(e.toastId)) ? e.toastId : H();
+}
+
+function U(e, t) {
+  return S.size > 0 ? C.emit(0, e, t) : z.push({
+    content: e,
+    options: t
+  }), t.toastId;
+}
+
+function Q(e, t) {
+  return { ...t,
+    type: t && t.type || e,
+    toastId: q(t)
+  };
+}
+
+function G(e) {
+  return (t, n) => U(t, Q(e, n));
+}
+
+function W(e, t) {
+  return U(e, Q(T.DEFAULT, t));
+}
+
+W.loading = (e, t) => U(e, Q(T.DEFAULT, {
+  isLoading: !0,
+  autoClose: !1,
+  closeOnClick: !1,
+  closeButton: !1,
+  draggable: !1,
+  ...t
+})), W.promise = function (e, t, n) {
+  let o,
+      {
+    pending: s,
+    error: a,
+    success: r
+  } = t;
+  s && (o = p(s) ? W.loading(s, n) : W.loading(s.render, { ...n,
+    ...s
+  }));
+
+  const i = {
+    isLoading: null,
+    autoClose: null,
+    closeOnClick: null,
+    closeButton: null,
+    draggable: null,
+    delay: 100
+  },
+        c = (e, t, s) => {
+    if (null == t) return void W.dismiss(o);
+    const a = {
+      type: e,
+      ...i,
+      ...n,
+      data: s
+    },
+          r = p(t) ? {
+      render: t
+    } : t;
+    return o ? W.update(o, { ...a,
+      ...r
+    }) : W(r.render, { ...a,
+      ...r
+    }), s;
+  },
+        l = m(e) ? e() : e;
+
+  return l.then(e => c("success", r, e)).catch(e => c("error", a, e)), l;
+}, W.success = G(T.SUCCESS), W.info = G(T.INFO), W.error = G(T.ERROR), W.warning = G(T.WARNING), W.warn = W.warning, W.dark = (e, t) => U(e, Q(T.DEFAULT, {
+  theme: "dark",
+  ...t
+})), W.dismiss = e => C.emit(1, e), W.clearWaitingQueue = function (e) {
+  return void 0 === e && (e = {}), C.emit(5, e);
+}, W.isActive = e => {
+  let t = !1;
+  return S.forEach(n => {
+    n.isToastActive && n.isToastActive(e) && (t = !0);
+  }), t;
+}, W.update = function (e, t) {
+  void 0 === t && (t = {}), setTimeout(() => {
+    const n = function (e, t) {
+      let {
+        containerId: n
+      } = t;
+      const o = S.get(n || F);
+      return o ? o.getToast(e) : null;
+    }(e, t);
+
+    if (n) {
+      const {
+        props: o,
+        content: s
+      } = n,
+            a = { ...o,
+        ...t,
+        toastId: t.toastId || e,
+        updateId: H()
+      };
+      a.toastId !== e && (a.staleId = e);
+      const r = a.render || s;
+      delete a.render, U(r, a);
+    }
+  }, 0);
+}, W.done = e => {
+  W.update(e, {
+    progress: 1
+  });
+}, W.onChange = e => (C.on(4, e), () => {
+  C.off(4, e);
+}), W.POSITION = h, W.TYPE = T, C.on(2, e => {
+  F = e.containerId || e, S.set(F, e), z.forEach(e => {
+    C.emit(0, e.content, e.options);
+  }), z = [];
+}).on(3, e => {
+  S.delete(e.containerId || e), 0 === S.size && C.off(0).off(1).off(5);
+});
+},{"react":"../node_modules/react/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js"}],"../node_modules/react-toastify/dist/ReactToastify.css":[function(require,module,exports) {
+
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+},{"_css_loader":"../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("core-js/modules/es6.array.copy-within.js");
@@ -70935,6 +71883,10 @@ var _stateGlobal = _interopRequireDefault(require("./state/state.global.js"));
 
 var _loading = require("./components/loading/loading.js");
 
+var _reactToastify = require("react-toastify");
+
+require("react-toastify/dist/ReactToastify.css");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -70966,7 +71918,6 @@ var App = (0, _mobxReact.observer)(function () {
     var date = event.currentTarget.value;
 
     if (_stateGlobal.default.availableDates.includes(date)) {
-      console.log("HANDLE DATE CHANGE", date);
       _stateGlobal.default.currentDate = date;
 
       _stateGlobal.default.selectStat(date);
@@ -70990,7 +71941,7 @@ var App = (0, _mobxReact.observer)(function () {
   }, []);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "App"
-  }, /*#__PURE__*/_react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement(_reactToastify.ToastContainer, null), /*#__PURE__*/_react.default.createElement("div", {
     className: "filters"
   }, !_stateGlobal.default.fetchingStats ? [/*#__PURE__*/_react.default.createElement("select", {
     value: _stateGlobal.default.currentClient,
@@ -71019,7 +71970,6 @@ var App = (0, _mobxReact.observer)(function () {
   }, "Selecione uma data dispon\xEDvel") : /*#__PURE__*/_react.default.createElement("div", {
     className: "client"
   }, /*#__PURE__*/_react.default.createElement("table", null, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", null, "id"), /*#__PURE__*/_react.default.createElement("th", null, "Chamadas total"), /*#__PURE__*/_react.default.createElement("th", null, "Chamadas atendidas"), /*#__PURE__*/_react.default.createElement("th", null, "Ocorr\xEAncias totais"), /*#__PURE__*/_react.default.createElement("th", null, "Ocorr\xEAncias com contato"))), /*#__PURE__*/_react.default.createElement("tbody", null, !!_stateGlobal.default.clients ? _stateGlobal.default.clients.map(function (client) {
-    console.log('??', _stateGlobal.default.currentClient, JSON.stringify(client, null, 2));
     if (client.id !== _stateGlobal.default.currentClient && _stateGlobal.default.currentClient != '') return null;
     return /*#__PURE__*/_react.default.createElement("tr", {
       key: "".concat(client.id, "+").concat(Math.random())
@@ -71028,7 +71978,7 @@ var App = (0, _mobxReact.observer)(function () {
 });
 var root = ReactDOM.createRoot(document.querySelector(".root"));
 root.render( /*#__PURE__*/_react.default.createElement(App, null));
-},{"core-js/modules/es6.array.copy-within.js":"../node_modules/core-js/modules/es6.array.copy-within.js","core-js/modules/es6.array.fill.js":"../node_modules/core-js/modules/es6.array.fill.js","core-js/modules/es6.array.filter.js":"../node_modules/core-js/modules/es6.array.filter.js","core-js/modules/es6.array.find.js":"../node_modules/core-js/modules/es6.array.find.js","core-js/modules/es6.array.find-index.js":"../node_modules/core-js/modules/es6.array.find-index.js","core-js/modules/es7.array.flat-map.js":"../node_modules/core-js/modules/es7.array.flat-map.js","core-js/modules/es6.array.from.js":"../node_modules/core-js/modules/es6.array.from.js","core-js/modules/es7.array.includes.js":"../node_modules/core-js/modules/es7.array.includes.js","core-js/modules/es6.array.iterator.js":"../node_modules/core-js/modules/es6.array.iterator.js","core-js/modules/es6.array.map.js":"../node_modules/core-js/modules/es6.array.map.js","core-js/modules/es6.array.of.js":"../node_modules/core-js/modules/es6.array.of.js","core-js/modules/es6.array.slice.js":"../node_modules/core-js/modules/es6.array.slice.js","core-js/modules/es6.array.sort.js":"../node_modules/core-js/modules/es6.array.sort.js","core-js/modules/es6.array.species.js":"../node_modules/core-js/modules/es6.array.species.js","core-js/modules/es6.date.to-primitive.js":"../node_modules/core-js/modules/es6.date.to-primitive.js","core-js/modules/es6.function.has-instance.js":"../node_modules/core-js/modules/es6.function.has-instance.js","core-js/modules/es6.function.name.js":"../node_modules/core-js/modules/es6.function.name.js","core-js/modules/es6.map.js":"../node_modules/core-js/modules/es6.map.js","core-js/modules/es6.math.acosh.js":"../node_modules/core-js/modules/es6.math.acosh.js","core-js/modules/es6.math.asinh.js":"../node_modules/core-js/modules/es6.math.asinh.js","core-js/modules/es6.math.atanh.js":"../node_modules/core-js/modules/es6.math.atanh.js","core-js/modules/es6.math.cbrt.js":"../node_modules/core-js/modules/es6.math.cbrt.js","core-js/modules/es6.math.clz32.js":"../node_modules/core-js/modules/es6.math.clz32.js","core-js/modules/es6.math.cosh.js":"../node_modules/core-js/modules/es6.math.cosh.js","core-js/modules/es6.math.expm1.js":"../node_modules/core-js/modules/es6.math.expm1.js","core-js/modules/es6.math.fround.js":"../node_modules/core-js/modules/es6.math.fround.js","core-js/modules/es6.math.hypot.js":"../node_modules/core-js/modules/es6.math.hypot.js","core-js/modules/es6.math.imul.js":"../node_modules/core-js/modules/es6.math.imul.js","core-js/modules/es6.math.log1p.js":"../node_modules/core-js/modules/es6.math.log1p.js","core-js/modules/es6.math.log10.js":"../node_modules/core-js/modules/es6.math.log10.js","core-js/modules/es6.math.log2.js":"../node_modules/core-js/modules/es6.math.log2.js","core-js/modules/es6.math.sign.js":"../node_modules/core-js/modules/es6.math.sign.js","core-js/modules/es6.math.sinh.js":"../node_modules/core-js/modules/es6.math.sinh.js","core-js/modules/es6.math.tanh.js":"../node_modules/core-js/modules/es6.math.tanh.js","core-js/modules/es6.math.trunc.js":"../node_modules/core-js/modules/es6.math.trunc.js","core-js/modules/es6.number.constructor.js":"../node_modules/core-js/modules/es6.number.constructor.js","core-js/modules/es6.number.epsilon.js":"../node_modules/core-js/modules/es6.number.epsilon.js","core-js/modules/es6.number.is-finite.js":"../node_modules/core-js/modules/es6.number.is-finite.js","core-js/modules/es6.number.is-integer.js":"../node_modules/core-js/modules/es6.number.is-integer.js","core-js/modules/es6.number.is-nan.js":"../node_modules/core-js/modules/es6.number.is-nan.js","core-js/modules/es6.number.is-safe-integer.js":"../node_modules/core-js/modules/es6.number.is-safe-integer.js","core-js/modules/es6.number.max-safe-integer.js":"../node_modules/core-js/modules/es6.number.max-safe-integer.js","core-js/modules/es6.number.min-safe-integer.js":"../node_modules/core-js/modules/es6.number.min-safe-integer.js","core-js/modules/es6.number.parse-float.js":"../node_modules/core-js/modules/es6.number.parse-float.js","core-js/modules/es6.number.parse-int.js":"../node_modules/core-js/modules/es6.number.parse-int.js","core-js/modules/es6.object.assign.js":"../node_modules/core-js/modules/es6.object.assign.js","core-js/modules/es7.object.define-getter.js":"../node_modules/core-js/modules/es7.object.define-getter.js","core-js/modules/es7.object.define-setter.js":"../node_modules/core-js/modules/es7.object.define-setter.js","core-js/modules/es7.object.entries.js":"../node_modules/core-js/modules/es7.object.entries.js","core-js/modules/es6.object.freeze.js":"../node_modules/core-js/modules/es6.object.freeze.js","core-js/modules/es6.object.get-own-property-descriptor.js":"../node_modules/core-js/modules/es6.object.get-own-property-descriptor.js","core-js/modules/es7.object.get-own-property-descriptors.js":"../node_modules/core-js/modules/es7.object.get-own-property-descriptors.js","core-js/modules/es6.object.get-own-property-names.js":"../node_modules/core-js/modules/es6.object.get-own-property-names.js","core-js/modules/es6.object.get-prototype-of.js":"../node_modules/core-js/modules/es6.object.get-prototype-of.js","core-js/modules/es7.object.lookup-getter.js":"../node_modules/core-js/modules/es7.object.lookup-getter.js","core-js/modules/es7.object.lookup-setter.js":"../node_modules/core-js/modules/es7.object.lookup-setter.js","core-js/modules/es6.object.prevent-extensions.js":"../node_modules/core-js/modules/es6.object.prevent-extensions.js","core-js/modules/es6.object.to-string.js":"../node_modules/core-js/modules/es6.object.to-string.js","core-js/modules/es6.object.is.js":"../node_modules/core-js/modules/es6.object.is.js","core-js/modules/es6.object.is-frozen.js":"../node_modules/core-js/modules/es6.object.is-frozen.js","core-js/modules/es6.object.is-sealed.js":"../node_modules/core-js/modules/es6.object.is-sealed.js","core-js/modules/es6.object.is-extensible.js":"../node_modules/core-js/modules/es6.object.is-extensible.js","core-js/modules/es6.object.keys.js":"../node_modules/core-js/modules/es6.object.keys.js","core-js/modules/es6.object.seal.js":"../node_modules/core-js/modules/es6.object.seal.js","core-js/modules/es6.object.set-prototype-of.js":"../node_modules/core-js/modules/es6.object.set-prototype-of.js","core-js/modules/es7.object.values.js":"../node_modules/core-js/modules/es7.object.values.js","core-js/modules/es6.promise.js":"../node_modules/core-js/modules/es6.promise.js","core-js/modules/es7.promise.finally.js":"../node_modules/core-js/modules/es7.promise.finally.js","core-js/modules/es6.reflect.apply.js":"../node_modules/core-js/modules/es6.reflect.apply.js","core-js/modules/es6.reflect.construct.js":"../node_modules/core-js/modules/es6.reflect.construct.js","core-js/modules/es6.reflect.define-property.js":"../node_modules/core-js/modules/es6.reflect.define-property.js","core-js/modules/es6.reflect.delete-property.js":"../node_modules/core-js/modules/es6.reflect.delete-property.js","core-js/modules/es6.reflect.get.js":"../node_modules/core-js/modules/es6.reflect.get.js","core-js/modules/es6.reflect.get-own-property-descriptor.js":"../node_modules/core-js/modules/es6.reflect.get-own-property-descriptor.js","core-js/modules/es6.reflect.get-prototype-of.js":"../node_modules/core-js/modules/es6.reflect.get-prototype-of.js","core-js/modules/es6.reflect.has.js":"../node_modules/core-js/modules/es6.reflect.has.js","core-js/modules/es6.reflect.is-extensible.js":"../node_modules/core-js/modules/es6.reflect.is-extensible.js","core-js/modules/es6.reflect.own-keys.js":"../node_modules/core-js/modules/es6.reflect.own-keys.js","core-js/modules/es6.reflect.prevent-extensions.js":"../node_modules/core-js/modules/es6.reflect.prevent-extensions.js","core-js/modules/es6.reflect.set.js":"../node_modules/core-js/modules/es6.reflect.set.js","core-js/modules/es6.reflect.set-prototype-of.js":"../node_modules/core-js/modules/es6.reflect.set-prototype-of.js","core-js/modules/es6.regexp.constructor.js":"../node_modules/core-js/modules/es6.regexp.constructor.js","core-js/modules/es6.regexp.flags.js":"../node_modules/core-js/modules/es6.regexp.flags.js","core-js/modules/es6.regexp.match.js":"../node_modules/core-js/modules/es6.regexp.match.js","core-js/modules/es6.regexp.replace.js":"../node_modules/core-js/modules/es6.regexp.replace.js","core-js/modules/es6.regexp.split.js":"../node_modules/core-js/modules/es6.regexp.split.js","core-js/modules/es6.regexp.search.js":"../node_modules/core-js/modules/es6.regexp.search.js","core-js/modules/es6.regexp.to-string.js":"../node_modules/core-js/modules/es6.regexp.to-string.js","core-js/modules/es6.set.js":"../node_modules/core-js/modules/es6.set.js","core-js/modules/es6.symbol.js":"../node_modules/core-js/modules/es6.symbol.js","core-js/modules/es7.symbol.async-iterator.js":"../node_modules/core-js/modules/es7.symbol.async-iterator.js","core-js/modules/es6.string.anchor.js":"../node_modules/core-js/modules/es6.string.anchor.js","core-js/modules/es6.string.big.js":"../node_modules/core-js/modules/es6.string.big.js","core-js/modules/es6.string.blink.js":"../node_modules/core-js/modules/es6.string.blink.js","core-js/modules/es6.string.bold.js":"../node_modules/core-js/modules/es6.string.bold.js","core-js/modules/es6.string.code-point-at.js":"../node_modules/core-js/modules/es6.string.code-point-at.js","core-js/modules/es6.string.ends-with.js":"../node_modules/core-js/modules/es6.string.ends-with.js","core-js/modules/es6.string.fixed.js":"../node_modules/core-js/modules/es6.string.fixed.js","core-js/modules/es6.string.fontcolor.js":"../node_modules/core-js/modules/es6.string.fontcolor.js","core-js/modules/es6.string.fontsize.js":"../node_modules/core-js/modules/es6.string.fontsize.js","core-js/modules/es6.string.from-code-point.js":"../node_modules/core-js/modules/es6.string.from-code-point.js","core-js/modules/es6.string.includes.js":"../node_modules/core-js/modules/es6.string.includes.js","core-js/modules/es6.string.italics.js":"../node_modules/core-js/modules/es6.string.italics.js","core-js/modules/es6.string.iterator.js":"../node_modules/core-js/modules/es6.string.iterator.js","core-js/modules/es6.string.link.js":"../node_modules/core-js/modules/es6.string.link.js","core-js/modules/es7.string.pad-start.js":"../node_modules/core-js/modules/es7.string.pad-start.js","core-js/modules/es7.string.pad-end.js":"../node_modules/core-js/modules/es7.string.pad-end.js","core-js/modules/es6.string.raw.js":"../node_modules/core-js/modules/es6.string.raw.js","core-js/modules/es6.string.repeat.js":"../node_modules/core-js/modules/es6.string.repeat.js","core-js/modules/es6.string.small.js":"../node_modules/core-js/modules/es6.string.small.js","core-js/modules/es6.string.starts-with.js":"../node_modules/core-js/modules/es6.string.starts-with.js","core-js/modules/es6.string.strike.js":"../node_modules/core-js/modules/es6.string.strike.js","core-js/modules/es6.string.sub.js":"../node_modules/core-js/modules/es6.string.sub.js","core-js/modules/es6.string.sup.js":"../node_modules/core-js/modules/es6.string.sup.js","core-js/modules/es7.string.trim-left.js":"../node_modules/core-js/modules/es7.string.trim-left.js","core-js/modules/es7.string.trim-right.js":"../node_modules/core-js/modules/es7.string.trim-right.js","core-js/modules/es6.typed.array-buffer.js":"../node_modules/core-js/modules/es6.typed.array-buffer.js","core-js/modules/es6.typed.int8-array.js":"../node_modules/core-js/modules/es6.typed.int8-array.js","core-js/modules/es6.typed.uint8-array.js":"../node_modules/core-js/modules/es6.typed.uint8-array.js","core-js/modules/es6.typed.uint8-clamped-array.js":"../node_modules/core-js/modules/es6.typed.uint8-clamped-array.js","core-js/modules/es6.typed.int16-array.js":"../node_modules/core-js/modules/es6.typed.int16-array.js","core-js/modules/es6.typed.uint16-array.js":"../node_modules/core-js/modules/es6.typed.uint16-array.js","core-js/modules/es6.typed.int32-array.js":"../node_modules/core-js/modules/es6.typed.int32-array.js","core-js/modules/es6.typed.uint32-array.js":"../node_modules/core-js/modules/es6.typed.uint32-array.js","core-js/modules/es6.typed.float32-array.js":"../node_modules/core-js/modules/es6.typed.float32-array.js","core-js/modules/es6.typed.float64-array.js":"../node_modules/core-js/modules/es6.typed.float64-array.js","core-js/modules/es6.weak-map.js":"../node_modules/core-js/modules/es6.weak-map.js","core-js/modules/es6.weak-set.js":"../node_modules/core-js/modules/es6.weak-set.js","core-js/modules/web.timers.js":"../node_modules/core-js/modules/web.timers.js","core-js/modules/web.immediate.js":"../node_modules/core-js/modules/web.immediate.js","core-js/modules/web.dom.iterable.js":"../node_modules/core-js/modules/web.dom.iterable.js","regenerator-runtime/runtime.js":"../node_modules/regenerator-runtime/runtime.js","react":"../node_modules/react/index.js","./index.less":"index.less","react-dom/client":"../node_modules/react-dom/client.js","mobx-react":"../node_modules/mobx-react/dist/mobxreact.esm.js","mobx":"../node_modules/mobx/dist/mobx.esm.js","./components/charts/charts.js":"components/charts/charts.js","./state/state.global.js":"state/state.global.js","./components/loading/loading.js":"components/loading/loading.js"}],"../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"core-js/modules/es6.array.copy-within.js":"../node_modules/core-js/modules/es6.array.copy-within.js","core-js/modules/es6.array.fill.js":"../node_modules/core-js/modules/es6.array.fill.js","core-js/modules/es6.array.filter.js":"../node_modules/core-js/modules/es6.array.filter.js","core-js/modules/es6.array.find.js":"../node_modules/core-js/modules/es6.array.find.js","core-js/modules/es6.array.find-index.js":"../node_modules/core-js/modules/es6.array.find-index.js","core-js/modules/es7.array.flat-map.js":"../node_modules/core-js/modules/es7.array.flat-map.js","core-js/modules/es6.array.from.js":"../node_modules/core-js/modules/es6.array.from.js","core-js/modules/es7.array.includes.js":"../node_modules/core-js/modules/es7.array.includes.js","core-js/modules/es6.array.iterator.js":"../node_modules/core-js/modules/es6.array.iterator.js","core-js/modules/es6.array.map.js":"../node_modules/core-js/modules/es6.array.map.js","core-js/modules/es6.array.of.js":"../node_modules/core-js/modules/es6.array.of.js","core-js/modules/es6.array.slice.js":"../node_modules/core-js/modules/es6.array.slice.js","core-js/modules/es6.array.sort.js":"../node_modules/core-js/modules/es6.array.sort.js","core-js/modules/es6.array.species.js":"../node_modules/core-js/modules/es6.array.species.js","core-js/modules/es6.date.to-primitive.js":"../node_modules/core-js/modules/es6.date.to-primitive.js","core-js/modules/es6.function.has-instance.js":"../node_modules/core-js/modules/es6.function.has-instance.js","core-js/modules/es6.function.name.js":"../node_modules/core-js/modules/es6.function.name.js","core-js/modules/es6.map.js":"../node_modules/core-js/modules/es6.map.js","core-js/modules/es6.math.acosh.js":"../node_modules/core-js/modules/es6.math.acosh.js","core-js/modules/es6.math.asinh.js":"../node_modules/core-js/modules/es6.math.asinh.js","core-js/modules/es6.math.atanh.js":"../node_modules/core-js/modules/es6.math.atanh.js","core-js/modules/es6.math.cbrt.js":"../node_modules/core-js/modules/es6.math.cbrt.js","core-js/modules/es6.math.clz32.js":"../node_modules/core-js/modules/es6.math.clz32.js","core-js/modules/es6.math.cosh.js":"../node_modules/core-js/modules/es6.math.cosh.js","core-js/modules/es6.math.expm1.js":"../node_modules/core-js/modules/es6.math.expm1.js","core-js/modules/es6.math.fround.js":"../node_modules/core-js/modules/es6.math.fround.js","core-js/modules/es6.math.hypot.js":"../node_modules/core-js/modules/es6.math.hypot.js","core-js/modules/es6.math.imul.js":"../node_modules/core-js/modules/es6.math.imul.js","core-js/modules/es6.math.log1p.js":"../node_modules/core-js/modules/es6.math.log1p.js","core-js/modules/es6.math.log10.js":"../node_modules/core-js/modules/es6.math.log10.js","core-js/modules/es6.math.log2.js":"../node_modules/core-js/modules/es6.math.log2.js","core-js/modules/es6.math.sign.js":"../node_modules/core-js/modules/es6.math.sign.js","core-js/modules/es6.math.sinh.js":"../node_modules/core-js/modules/es6.math.sinh.js","core-js/modules/es6.math.tanh.js":"../node_modules/core-js/modules/es6.math.tanh.js","core-js/modules/es6.math.trunc.js":"../node_modules/core-js/modules/es6.math.trunc.js","core-js/modules/es6.number.constructor.js":"../node_modules/core-js/modules/es6.number.constructor.js","core-js/modules/es6.number.epsilon.js":"../node_modules/core-js/modules/es6.number.epsilon.js","core-js/modules/es6.number.is-finite.js":"../node_modules/core-js/modules/es6.number.is-finite.js","core-js/modules/es6.number.is-integer.js":"../node_modules/core-js/modules/es6.number.is-integer.js","core-js/modules/es6.number.is-nan.js":"../node_modules/core-js/modules/es6.number.is-nan.js","core-js/modules/es6.number.is-safe-integer.js":"../node_modules/core-js/modules/es6.number.is-safe-integer.js","core-js/modules/es6.number.max-safe-integer.js":"../node_modules/core-js/modules/es6.number.max-safe-integer.js","core-js/modules/es6.number.min-safe-integer.js":"../node_modules/core-js/modules/es6.number.min-safe-integer.js","core-js/modules/es6.number.parse-float.js":"../node_modules/core-js/modules/es6.number.parse-float.js","core-js/modules/es6.number.parse-int.js":"../node_modules/core-js/modules/es6.number.parse-int.js","core-js/modules/es6.object.assign.js":"../node_modules/core-js/modules/es6.object.assign.js","core-js/modules/es7.object.define-getter.js":"../node_modules/core-js/modules/es7.object.define-getter.js","core-js/modules/es7.object.define-setter.js":"../node_modules/core-js/modules/es7.object.define-setter.js","core-js/modules/es7.object.entries.js":"../node_modules/core-js/modules/es7.object.entries.js","core-js/modules/es6.object.freeze.js":"../node_modules/core-js/modules/es6.object.freeze.js","core-js/modules/es6.object.get-own-property-descriptor.js":"../node_modules/core-js/modules/es6.object.get-own-property-descriptor.js","core-js/modules/es7.object.get-own-property-descriptors.js":"../node_modules/core-js/modules/es7.object.get-own-property-descriptors.js","core-js/modules/es6.object.get-own-property-names.js":"../node_modules/core-js/modules/es6.object.get-own-property-names.js","core-js/modules/es6.object.get-prototype-of.js":"../node_modules/core-js/modules/es6.object.get-prototype-of.js","core-js/modules/es7.object.lookup-getter.js":"../node_modules/core-js/modules/es7.object.lookup-getter.js","core-js/modules/es7.object.lookup-setter.js":"../node_modules/core-js/modules/es7.object.lookup-setter.js","core-js/modules/es6.object.prevent-extensions.js":"../node_modules/core-js/modules/es6.object.prevent-extensions.js","core-js/modules/es6.object.to-string.js":"../node_modules/core-js/modules/es6.object.to-string.js","core-js/modules/es6.object.is.js":"../node_modules/core-js/modules/es6.object.is.js","core-js/modules/es6.object.is-frozen.js":"../node_modules/core-js/modules/es6.object.is-frozen.js","core-js/modules/es6.object.is-sealed.js":"../node_modules/core-js/modules/es6.object.is-sealed.js","core-js/modules/es6.object.is-extensible.js":"../node_modules/core-js/modules/es6.object.is-extensible.js","core-js/modules/es6.object.keys.js":"../node_modules/core-js/modules/es6.object.keys.js","core-js/modules/es6.object.seal.js":"../node_modules/core-js/modules/es6.object.seal.js","core-js/modules/es6.object.set-prototype-of.js":"../node_modules/core-js/modules/es6.object.set-prototype-of.js","core-js/modules/es7.object.values.js":"../node_modules/core-js/modules/es7.object.values.js","core-js/modules/es6.promise.js":"../node_modules/core-js/modules/es6.promise.js","core-js/modules/es7.promise.finally.js":"../node_modules/core-js/modules/es7.promise.finally.js","core-js/modules/es6.reflect.apply.js":"../node_modules/core-js/modules/es6.reflect.apply.js","core-js/modules/es6.reflect.construct.js":"../node_modules/core-js/modules/es6.reflect.construct.js","core-js/modules/es6.reflect.define-property.js":"../node_modules/core-js/modules/es6.reflect.define-property.js","core-js/modules/es6.reflect.delete-property.js":"../node_modules/core-js/modules/es6.reflect.delete-property.js","core-js/modules/es6.reflect.get.js":"../node_modules/core-js/modules/es6.reflect.get.js","core-js/modules/es6.reflect.get-own-property-descriptor.js":"../node_modules/core-js/modules/es6.reflect.get-own-property-descriptor.js","core-js/modules/es6.reflect.get-prototype-of.js":"../node_modules/core-js/modules/es6.reflect.get-prototype-of.js","core-js/modules/es6.reflect.has.js":"../node_modules/core-js/modules/es6.reflect.has.js","core-js/modules/es6.reflect.is-extensible.js":"../node_modules/core-js/modules/es6.reflect.is-extensible.js","core-js/modules/es6.reflect.own-keys.js":"../node_modules/core-js/modules/es6.reflect.own-keys.js","core-js/modules/es6.reflect.prevent-extensions.js":"../node_modules/core-js/modules/es6.reflect.prevent-extensions.js","core-js/modules/es6.reflect.set.js":"../node_modules/core-js/modules/es6.reflect.set.js","core-js/modules/es6.reflect.set-prototype-of.js":"../node_modules/core-js/modules/es6.reflect.set-prototype-of.js","core-js/modules/es6.regexp.constructor.js":"../node_modules/core-js/modules/es6.regexp.constructor.js","core-js/modules/es6.regexp.flags.js":"../node_modules/core-js/modules/es6.regexp.flags.js","core-js/modules/es6.regexp.match.js":"../node_modules/core-js/modules/es6.regexp.match.js","core-js/modules/es6.regexp.replace.js":"../node_modules/core-js/modules/es6.regexp.replace.js","core-js/modules/es6.regexp.split.js":"../node_modules/core-js/modules/es6.regexp.split.js","core-js/modules/es6.regexp.search.js":"../node_modules/core-js/modules/es6.regexp.search.js","core-js/modules/es6.regexp.to-string.js":"../node_modules/core-js/modules/es6.regexp.to-string.js","core-js/modules/es6.set.js":"../node_modules/core-js/modules/es6.set.js","core-js/modules/es6.symbol.js":"../node_modules/core-js/modules/es6.symbol.js","core-js/modules/es7.symbol.async-iterator.js":"../node_modules/core-js/modules/es7.symbol.async-iterator.js","core-js/modules/es6.string.anchor.js":"../node_modules/core-js/modules/es6.string.anchor.js","core-js/modules/es6.string.big.js":"../node_modules/core-js/modules/es6.string.big.js","core-js/modules/es6.string.blink.js":"../node_modules/core-js/modules/es6.string.blink.js","core-js/modules/es6.string.bold.js":"../node_modules/core-js/modules/es6.string.bold.js","core-js/modules/es6.string.code-point-at.js":"../node_modules/core-js/modules/es6.string.code-point-at.js","core-js/modules/es6.string.ends-with.js":"../node_modules/core-js/modules/es6.string.ends-with.js","core-js/modules/es6.string.fixed.js":"../node_modules/core-js/modules/es6.string.fixed.js","core-js/modules/es6.string.fontcolor.js":"../node_modules/core-js/modules/es6.string.fontcolor.js","core-js/modules/es6.string.fontsize.js":"../node_modules/core-js/modules/es6.string.fontsize.js","core-js/modules/es6.string.from-code-point.js":"../node_modules/core-js/modules/es6.string.from-code-point.js","core-js/modules/es6.string.includes.js":"../node_modules/core-js/modules/es6.string.includes.js","core-js/modules/es6.string.italics.js":"../node_modules/core-js/modules/es6.string.italics.js","core-js/modules/es6.string.iterator.js":"../node_modules/core-js/modules/es6.string.iterator.js","core-js/modules/es6.string.link.js":"../node_modules/core-js/modules/es6.string.link.js","core-js/modules/es7.string.pad-start.js":"../node_modules/core-js/modules/es7.string.pad-start.js","core-js/modules/es7.string.pad-end.js":"../node_modules/core-js/modules/es7.string.pad-end.js","core-js/modules/es6.string.raw.js":"../node_modules/core-js/modules/es6.string.raw.js","core-js/modules/es6.string.repeat.js":"../node_modules/core-js/modules/es6.string.repeat.js","core-js/modules/es6.string.small.js":"../node_modules/core-js/modules/es6.string.small.js","core-js/modules/es6.string.starts-with.js":"../node_modules/core-js/modules/es6.string.starts-with.js","core-js/modules/es6.string.strike.js":"../node_modules/core-js/modules/es6.string.strike.js","core-js/modules/es6.string.sub.js":"../node_modules/core-js/modules/es6.string.sub.js","core-js/modules/es6.string.sup.js":"../node_modules/core-js/modules/es6.string.sup.js","core-js/modules/es7.string.trim-left.js":"../node_modules/core-js/modules/es7.string.trim-left.js","core-js/modules/es7.string.trim-right.js":"../node_modules/core-js/modules/es7.string.trim-right.js","core-js/modules/es6.typed.array-buffer.js":"../node_modules/core-js/modules/es6.typed.array-buffer.js","core-js/modules/es6.typed.int8-array.js":"../node_modules/core-js/modules/es6.typed.int8-array.js","core-js/modules/es6.typed.uint8-array.js":"../node_modules/core-js/modules/es6.typed.uint8-array.js","core-js/modules/es6.typed.uint8-clamped-array.js":"../node_modules/core-js/modules/es6.typed.uint8-clamped-array.js","core-js/modules/es6.typed.int16-array.js":"../node_modules/core-js/modules/es6.typed.int16-array.js","core-js/modules/es6.typed.uint16-array.js":"../node_modules/core-js/modules/es6.typed.uint16-array.js","core-js/modules/es6.typed.int32-array.js":"../node_modules/core-js/modules/es6.typed.int32-array.js","core-js/modules/es6.typed.uint32-array.js":"../node_modules/core-js/modules/es6.typed.uint32-array.js","core-js/modules/es6.typed.float32-array.js":"../node_modules/core-js/modules/es6.typed.float32-array.js","core-js/modules/es6.typed.float64-array.js":"../node_modules/core-js/modules/es6.typed.float64-array.js","core-js/modules/es6.weak-map.js":"../node_modules/core-js/modules/es6.weak-map.js","core-js/modules/es6.weak-set.js":"../node_modules/core-js/modules/es6.weak-set.js","core-js/modules/web.timers.js":"../node_modules/core-js/modules/web.timers.js","core-js/modules/web.immediate.js":"../node_modules/core-js/modules/web.immediate.js","core-js/modules/web.dom.iterable.js":"../node_modules/core-js/modules/web.dom.iterable.js","regenerator-runtime/runtime.js":"../node_modules/regenerator-runtime/runtime.js","react":"../node_modules/react/index.js","./index.less":"index.less","react-dom/client":"../node_modules/react-dom/client.js","mobx-react":"../node_modules/mobx-react/dist/mobxreact.esm.js","mobx":"../node_modules/mobx/dist/mobx.esm.js","./components/charts/charts.js":"components/charts/charts.js","./state/state.global.js":"state/state.global.js","./components/loading/loading.js":"components/loading/loading.js","react-toastify":"../node_modules/react-toastify/dist/react-toastify.esm.mjs","react-toastify/dist/ReactToastify.css":"../node_modules/react-toastify/dist/ReactToastify.css"}],"../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -71056,7 +72006,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33587" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39231" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

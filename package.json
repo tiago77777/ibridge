@@ -7,7 +7,8 @@
     "test:server": "ENV=test DEBUG=myapp:* nodemon -w src/server src/server/server.js",
     "debug:server": "DEBUG=myapp:* node src/server/server.js",
     "prod:server": "ENV=production DEBUG=myapp:* node src/server/server.js",
-    "test": "parcel build src/index.html"
+    "test": "parcel serve src/index.html",
+    "build": "parcel build src/index.html"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +26,6 @@
     "mysql": "^2.18.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-toastify": "^9.0.4",
     "sqlite": "^4.1.1",
     "sqlite3": "^5.0.8",
     "state": "^0.2.0"
@@ -35,7 +35,6 @@
     "@babel/plugin-proposal-class-properties": "^7.17.12",
     "@babel/plugin-proposal-decorators": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
-    "@babel/preset-react": "^7.17.12",
-    "cssnano": "^5.1.11"
+    "@babel/preset-react": "^7.17.12"
   }
 }
