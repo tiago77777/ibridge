@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:server": "ENV=test DEBUG=myapp:* nodemon -w src/server src/server/server.js",
-    "debug:server": "DEBUG=myapp:* node src/server/server.js",
-    "prod:server": "ENV=production DEBUG=myapp:* node src/server/server.js",
+    "dev:server": "ENV=test DEBUG=myapp:* nodemon -w src/server src/server/server.js",
+    "//debug:server": "DEBUG=myapp:* node src/server/server.js",
+    "//prod:server": "ENV=production DEBUG=myapp:* node src/server/server.js",
     "test": "parcel serve src/index.html",
-    "build": "parcel build src/index.html"
+    "vercel:server":"ENV=test node src/server/server.js",
+    "build": "parcel build src/index.html --no-minify"
   },
   "keywords": [],
   "author": "",
