@@ -1,14 +1,16 @@
-ˋgit clone http://github.com/tiago77777/ibridge.gitˋ
+dei um git push -f, se quiser reclonar o diretório como um caminho mais fácil, à vontade
 
-ˋcd ibridgeˋ
+`git clone http://github.com/tiago77777/ibridge.git`
 
-ˋnpm installˋ
+`cd ibridge`
 
-ˋnpm run test:serverˋ
+`npm install && npm i parcel-bundler -g`
 
-ˋnpm testˋ se precisar
+`npm run build` se quiser
+
+`npm run vercel:server`
 
 se tiver firefox:
-ˋfirefox http://localhost:3000ˋ
+`firefox http://localhost:3000`
 
 build script não está funcionando.
