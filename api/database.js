@@ -40,7 +40,7 @@ class SQLITEStrategy {
   async connect() {
     debug("DATABASE CONNECTING...")
     this.connection = await open({ 
-      filename: path.resolve('src', 'server', 'database', `database.${ENV.toLowerCase()}.db`),
+      filename: path.resolve('api', 'database', `database.${ENV.toLowerCase()}.db`),
       driver: sqlite3.Database
     })
     debug("DATABASE CONNECTION DONE");

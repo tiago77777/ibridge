@@ -28,7 +28,7 @@ async function getCallData() {
 
   // tests
   if (ENV === 'test') {
-   return JSON.parse(fs.readFileSync(path.resolve('src/server/dados.json'))); 
+   return JSON.parse(fs.readFileSync(path.resolve('api/dados.json'))); 
   }
   
    
