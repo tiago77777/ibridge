@@ -1,12 +1,11 @@
 import axios from "axios"
-
-
+import {ENV} from "./constants"
 
 class API {
 	constructor() {
 		this.http = axios.create({
-    	baseURL: "http://localhost:3000"
-    })
+    baseURL: ENV == "development" ? "http://localhost:3000" : "://"
+  })
 	}
 	async getClients() {
 		try {
