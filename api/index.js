@@ -1,5 +1,5 @@
 const path = require("path")
-require("dotenv").config({path: path.resolve('src/server/.env')});
+require("dotenv").config({path: path.resolve('api/.env')});
 const expressF = require("express")
 const fs = require("fs")
 const bodyParser = require("body-parser");

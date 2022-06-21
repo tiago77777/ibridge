@@ -1,6 +1,6 @@
 import {makeAutoObservable, action, observable} from "mobx"
 import api from "./../api.js"
-
+import {toast} from "react-toastify"
 
 class State {
 	@observable fetchingClients = false;
@@ -85,7 +85,7 @@ class State {
 		this.fetchingStats = true;
 		api.getStats().then(action((res) => {
 			if (res.status === "ERR") {
-				return toast.show(res.message);
+				return toast.error(res.message);
 			}
 			this.stats = res.data;
 			this.availableDates = res.data.map(stat => {
@@ -99,7 +99,7 @@ class State {
 	 this.fetchingClients = true;
 	 api.getClientsByDate(date).then(action(res => {
 	  if (res.status === "ERR") {
-	   return toast.show(err.message);
+	   return toast.error(err.message);
 	  }
 	  this.clients = res.data;
 	  this.fetchingClients = false;

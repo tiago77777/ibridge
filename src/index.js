@@ -11,7 +11,7 @@ import {
 } from "./components/charts/charts.js"
 import state from "./state/state.global.js"
 import {SmallLoading} from "./components/loading/loading.js"
-import {ToastContainer} from "react-toastify"
+import {ToastContainer, toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = observer(() => {
@@ -39,18 +39,18 @@ const App = observer(() => {
     }, [])
     return (
         <div className="App">
-            <ToastContainer/>
+            <ToastContainer position="bottom-center"/>
             <div className="filters">
               {
                 !state.fetchingStats ? [
                   <select value={state.currentClient} key="select-client" onChange={filterClient}>
                     {
                       [
-                       <option value="" selected>Cliente</option>,
+                       <option key={Math.random()} value="" selected>Cliente</option>,
                        state.clientsToSelect.map((client,key) => {
                          return (
                            <option key={client} value={client}>{client}</option>
-                         ) 
+                         )
                        })
                       ]
                     }
@@ -68,7 +68,7 @@ const App = observer(() => {
             {
              state.fetchingClients === true ? (
               <SmallLoading/>
-             ) : state.clients.length < 1 ? ( 
+             ) : state.clients.length < 1 ? (
               <h1 className="noData">Selecione uma data disponível</h1>
              ) : (
               <div className="client">
@@ -83,7 +83,7 @@ const App = observer(() => {
                     </tr>
                   </thead>
                   <tbody>
-                    { 
+                    {
                      !!state.clients ? (
                         state.clients.map(client => {
                            if (client.id !== state.currentClient && state.currentClient != '')

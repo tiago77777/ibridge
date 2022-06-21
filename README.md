@@ -4,13 +4,12 @@ dei um git push -f, se quiser reclonar o diretório como um caminho mais fácil,
 
 `cd ibridge`
 
-`npm install && npm i parcel-bundler -g`
+`npm install`
 
-`npm run build` se quiser
+se quiser recompilar o frontend:
+`npm i -g parcel-bundler && npm run build`  
 
-`npm run vercel:server`
+`npm run dev:server`
 
 se tiver firefox:
 `firefox http://localhost:3000`
-
-build script não está funcionando.

@@ -70046,7 +70046,17 @@ module.exports.default = axios;
 
 },{"./utils":"../node_modules/axios/lib/utils.js","./helpers/bind":"../node_modules/axios/lib/helpers/bind.js","./core/Axios":"../node_modules/axios/lib/core/Axios.js","./core/mergeConfig":"../node_modules/axios/lib/core/mergeConfig.js","./defaults":"../node_modules/axios/lib/defaults/index.js","./cancel/CanceledError":"../node_modules/axios/lib/cancel/CanceledError.js","./cancel/CancelToken":"../node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"../node_modules/axios/lib/cancel/isCancel.js","./env/data":"../node_modules/axios/lib/env/data.js","./helpers/toFormData":"../node_modules/axios/lib/helpers/toFormData.js","../lib/core/AxiosError":"../node_modules/axios/lib/core/AxiosError.js","./helpers/spread":"../node_modules/axios/lib/helpers/spread.js","./helpers/isAxiosError":"../node_modules/axios/lib/helpers/isAxiosError.js"}],"../node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"api.js":[function(require,module,exports) {
+},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ENV = void 0;
+var ENV = "development"; //"development"
+
+exports.ENV = ENV;
+},{}],"api.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -70055,6 +70065,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
+
+var _constants = require("./constants");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70073,7 +70085,7 @@ var API = /*#__PURE__*/function () {
     _classCallCheck(this, API);
 
     this.http = _axios.default.create({
-      baseURL: "http://localhost:3000"
+      baseURL: _constants.ENV == "development" ? "http://localhost:3000" : "/api/"
     });
   }
 
@@ -70268,392 +70280,7 @@ var API = /*#__PURE__*/function () {
 var api = new API();
 var _default = api;
 exports.default = _default;
-},{"axios":"../node_modules/axios/index.js"}],"state/state.global.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _mobx = require("mobx");
-
-var _api = _interopRequireDefault(require("./../api.js"));
-
-var _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
-
-function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
-
-var State = (_class = /*#__PURE__*/function () {
-  function State() {
-    _classCallCheck(this, State);
-
-    _initializerDefineProperty(this, "fetchingClients", _descriptor, this);
-
-    _initializerDefineProperty(this, "fetchingStats", _descriptor2, this);
-
-    _initializerDefineProperty(this, "stats", _descriptor3, this);
-
-    _initializerDefineProperty(this, "currentStat", _descriptor4, this);
-
-    _initializerDefineProperty(this, "currentDate", _descriptor5, this);
-
-    _initializerDefineProperty(this, "availableDates", _descriptor6, this);
-
-    _initializerDefineProperty(this, "clientsToSelect", _descriptor7, this);
-
-    _defineProperty(this, "clients", _mobx.observable.array([], {
-      deep: true
-    }));
-
-    _defineProperty(this, "tableClients", _mobx.observable.array([], {
-      deep: true
-    }));
-
-    _initializerDefineProperty(this, "currentClient", _descriptor8, this);
-
-    (0, _mobx.makeAutoObservable)(this);
-  }
-
-  _createClass(State, [{
-    key: "getClassificationsData",
-    value: function getClassificationsData() {
-      if (!this.currentStat) return {
-        labels: [],
-        data: []
-      };
-      return {
-        labels: ['Falha operadora', 'Telefone incorreto', 'Nao atendida', 'Atendimento máquina', 'Atendimento humano', 'Abandono pre fila', 'Abandono fila', 'Atendimento PA?'],
-        data: [this.currentStat.chamadas_falha_operadora, this.currentStat.chamadas_telefone_incorreto, this.currentStat.chamadas_nao_atendida, this.currentStat.chamadas_atendimento_maquina, this.currentStat.chamadas_atendimento_humano, this.currentStat.chamadas_abandono_pre_fila, this.currentStat.chamadas_abandono_fila, this.currentStat.chamadas_atendimento_pa]
-      };
-    }
-  }, {
-    key: "getOcurrencies",
-    value: function getOcurrencies() {
-      if (!this.currentStat) return {
-        labels: [],
-        data: []
-      };
-      return {
-        labels: ['Total', 'Sem contato', 'Com contato', 'Abordagem', 'Fechamento'],
-        data: [this.currentStat.ocorrencias_total, this.currentStat.ocorrencias_sem_contato, this.currentStat.ocorrencias_com_contato, this.currentStat.ocorrencias_abordagem, this.currentStat.ocorrencias_fechamento]
-      };
-    }
-  }, {
-    key: "getDailyCalls",
-    value: function getDailyCalls() {
-      var stats = {
-        labels: [],
-        data: []
-      };
-      var data = [];
-      var startDate = new Date(state.currentDate).getTime();
-      stats.data = this.stats.map(function (stat) {
-        var dateStr = stat.data.split(' ')[0];
-        var date = new Date(dateStr).getTime();
-        if (date < startDate) return null;
-        stats.labels.push(dateStr);
-        return stat.chamadas_total;
-      });
-      return stats;
-    }
-  }, {
-    key: "setCurrentClient",
-    value: function setCurrentClient(client) {
-      this.currentClient = client;
-    }
-  }, {
-    key: "getStats",
-    value: function getStats() {
-      var _this = this;
-
-      this.fetchingStats = true;
-
-      _api.default.getStats().then((0, _mobx.action)(function (res) {
-        if (res.status === "ERR") {
-          return toast.show(res.message);
-        }
-
-        _this.stats = res.data;
-        _this.availableDates = res.data.map(function (stat) {
-          return stat.data.split(' ')[0];
-        });
-        _this.fetchingStats = false;
-      }));
-    }
-  }, {
-    key: "getClientsByDate",
-    value: function getClientsByDate(date) {
-      var _this2 = this;
-
-      this.fetchingClients = true;
-
-      _api.default.getClientsByDate(date).then((0, _mobx.action)(function (res) {
-        if (res.status === "ERR") {
-          return toast.show(err.message);
-        }
-
-        _this2.clients = res.data;
-        _this2.fetchingClients = false;
-      }));
-    }
-  }, {
-    key: "selectStat",
-    value: function selectStat(date) {
-      this.getClientsByDate(date);
-      var stat = this.stats.find(function (stat) {
-        var d = stat.data.split(' ')[0];
-        return d === date;
-      });
-      this.currentStat = stat;
-      this.clientsToSelect = stat.clientes.split(',');
-    }
-  }]);
-
-  return State;
-}(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "fetchingClients", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return false;
-  }
-}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "fetchingStats", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return false;
-  }
-}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "stats", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return [];
-  }
-}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "currentStat", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return undefined;
-  }
-}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "currentDate", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return '';
-  }
-}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "availableDates", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return [];
-  }
-}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "clientsToSelect", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return [];
-  }
-}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "currentClient", [_mobx.observable], {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  initializer: function initializer() {
-    return '';
-  }
-}), _applyDecoratedDescriptor(_class.prototype, "setCurrentClient", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "setCurrentClient"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "getStats", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "getStats"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "getClientsByDate", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "getClientsByDate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "selectStat", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "selectStat"), _class.prototype)), _class);
-var state = new State();
-var _default = state;
-exports.default = _default;
-},{"mobx":"../node_modules/mobx/dist/mobx.esm.js","./../api.js":"api.js"}],"components/charts/charts.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.OcurrenciesChart = exports.DailyCallsChart = exports.ClassificationsChart = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _auto = _interopRequireDefault(require("chart.js/auto"));
-
-require("./charts.less");
-
-var _stateGlobal = _interopRequireDefault(require("./../../state/state.global.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-var DailyCallsChart = function DailyCallsChart() {
-  var id = Math.random();
-
-  var data = _stateGlobal.default.getDailyCalls();
-
-  (0, _react.useEffect)(function () {
-    var ctx = document.getElementById(id);
-    var myChart = new _auto.default(ctx, {
-      type: 'line',
-      data: {
-        labels: data.labels,
-        datasets: [{
-          label: 'Chamadas por dia',
-          data: data.data
-        }]
-      },
-      options: {
-        responsive: true
-      }
-    });
-    return function () {
-      myChart.destroy();
-    };
-  });
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "DailyCallsChart chart",
-    style: {
-      width: "33%"
-    }
-  }, /*#__PURE__*/_react.default.createElement("canvas", {
-    id: id,
-    className: "canvas",
-    width: "100%"
-  }));
-};
-
-exports.DailyCallsChart = DailyCallsChart;
-
-var OcurrenciesChart = function OcurrenciesChart() {
-  var id = Math.random() + 4;
-
-  var data = _stateGlobal.default.getOcurrencies();
-
-  (0, _react.useEffect)(function () {
-    var ctx = document.getElementById(id);
-    var myChart = new _auto.default(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.labels,
-        datasets: [{
-          label: '',
-          data: data.data,
-          backgroundColor: ['red', 'green', 'blue', 'yellow', 'pink']
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-    return function () {
-      myChart.destroy();
-    };
-  });
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "OcurrenciesChart chart",
-    style: {
-      width: '33%'
-    }
-  }, /*#__PURE__*/_react.default.createElement("canvas", {
-    id: id,
-    width: "100%"
-  }));
-};
-
-exports.OcurrenciesChart = OcurrenciesChart;
-
-var ClassificationsChart = function ClassificationsChart() {
-  var id = Math.random() + 2;
-
-  var data = _stateGlobal.default.getClassificationsData();
-
-  (0, _react.useEffect)(function () {
-    var ctx = document.getElementById(id);
-    var myChart = new _auto.default(ctx, {
-      type: 'pie',
-      data: {
-        labels: data.labels,
-        datasets: [{
-          label: 'Classificação',
-          data: data.data,
-          backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple', 'orange', 'black', 'pink']
-        }]
-      },
-      options: {
-        responsive: true
-      }
-    });
-    return function () {
-      myChart.destroy();
-    };
-  });
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "ClassificationsChart chart",
-    style: {
-      width: '33%'
-    }
-  }, /*#__PURE__*/_react.default.createElement("canvas", {
-    id: id,
-    width: "100%"
-  }));
-};
-
-exports.ClassificationsChart = ClassificationsChart;
-},{"react":"../node_modules/react/index.js","chart.js/auto":"../node_modules/chart.js/auto/auto.esm.js","./charts.less":"components/charts/charts.less","./../../state/state.global.js":"state/state.global.js"}],"components/loading/loading.less":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/loading/loading.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SmallLoading = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./loading.less");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SmallLoading = function SmallLoading() {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "SmallLoading"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "spinner"
-  }));
-};
-
-exports.SmallLoading = SmallLoading;
-},{"react":"../node_modules/react/index.js","./loading.less":"components/loading/loading.less"}],"../node_modules/clsx/dist/clsx.m.js":[function(require,module,exports) {
+},{"axios":"../node_modules/axios/index.js","./constants":"constants.js"}],"../node_modules/clsx/dist/clsx.m.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -71594,7 +71221,394 @@ W.loading = (e, t) => U(e, Q(T.DEFAULT, {
 }).on(3, e => {
   S.delete(e.containerId || e), 0 === S.size && C.off(0).off(1).off(5);
 });
-},{"react":"../node_modules/react/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js"}],"../node_modules/react-toastify/dist/ReactToastify.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js"}],"state/state.global.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mobx = require("mobx");
+
+var _api = _interopRequireDefault(require("./../api.js"));
+
+var _reactToastify = require("react-toastify");
+
+var _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+var State = (_class = /*#__PURE__*/function () {
+  function State() {
+    _classCallCheck(this, State);
+
+    _initializerDefineProperty(this, "fetchingClients", _descriptor, this);
+
+    _initializerDefineProperty(this, "fetchingStats", _descriptor2, this);
+
+    _initializerDefineProperty(this, "stats", _descriptor3, this);
+
+    _initializerDefineProperty(this, "currentStat", _descriptor4, this);
+
+    _initializerDefineProperty(this, "currentDate", _descriptor5, this);
+
+    _initializerDefineProperty(this, "availableDates", _descriptor6, this);
+
+    _initializerDefineProperty(this, "clientsToSelect", _descriptor7, this);
+
+    _defineProperty(this, "clients", _mobx.observable.array([], {
+      deep: true
+    }));
+
+    _defineProperty(this, "tableClients", _mobx.observable.array([], {
+      deep: true
+    }));
+
+    _initializerDefineProperty(this, "currentClient", _descriptor8, this);
+
+    (0, _mobx.makeAutoObservable)(this);
+  }
+
+  _createClass(State, [{
+    key: "getClassificationsData",
+    value: function getClassificationsData() {
+      if (!this.currentStat) return {
+        labels: [],
+        data: []
+      };
+      return {
+        labels: ['Falha operadora', 'Telefone incorreto', 'Nao atendida', 'Atendimento máquina', 'Atendimento humano', 'Abandono pre fila', 'Abandono fila', 'Atendimento PA?'],
+        data: [this.currentStat.chamadas_falha_operadora, this.currentStat.chamadas_telefone_incorreto, this.currentStat.chamadas_nao_atendida, this.currentStat.chamadas_atendimento_maquina, this.currentStat.chamadas_atendimento_humano, this.currentStat.chamadas_abandono_pre_fila, this.currentStat.chamadas_abandono_fila, this.currentStat.chamadas_atendimento_pa]
+      };
+    }
+  }, {
+    key: "getOcurrencies",
+    value: function getOcurrencies() {
+      if (!this.currentStat) return {
+        labels: [],
+        data: []
+      };
+      return {
+        labels: ['Total', 'Sem contato', 'Com contato', 'Abordagem', 'Fechamento'],
+        data: [this.currentStat.ocorrencias_total, this.currentStat.ocorrencias_sem_contato, this.currentStat.ocorrencias_com_contato, this.currentStat.ocorrencias_abordagem, this.currentStat.ocorrencias_fechamento]
+      };
+    }
+  }, {
+    key: "getDailyCalls",
+    value: function getDailyCalls() {
+      var stats = {
+        labels: [],
+        data: []
+      };
+      var data = [];
+      var startDate = new Date(state.currentDate).getTime();
+      stats.data = this.stats.map(function (stat) {
+        var dateStr = stat.data.split(' ')[0];
+        var date = new Date(dateStr).getTime();
+        if (date < startDate) return null;
+        stats.labels.push(dateStr);
+        return stat.chamadas_total;
+      });
+      return stats;
+    }
+  }, {
+    key: "setCurrentClient",
+    value: function setCurrentClient(client) {
+      this.currentClient = client;
+    }
+  }, {
+    key: "getStats",
+    value: function getStats() {
+      var _this = this;
+
+      this.fetchingStats = true;
+
+      _api.default.getStats().then((0, _mobx.action)(function (res) {
+        if (res.status === "ERR") {
+          return _reactToastify.toast.error(res.message);
+        }
+
+        _this.stats = res.data;
+        _this.availableDates = res.data.map(function (stat) {
+          return stat.data.split(' ')[0];
+        });
+        _this.fetchingStats = false;
+      }));
+    }
+  }, {
+    key: "getClientsByDate",
+    value: function getClientsByDate(date) {
+      var _this2 = this;
+
+      this.fetchingClients = true;
+
+      _api.default.getClientsByDate(date).then((0, _mobx.action)(function (res) {
+        if (res.status === "ERR") {
+          return _reactToastify.toast.error(err.message);
+        }
+
+        _this2.clients = res.data;
+        _this2.fetchingClients = false;
+      }));
+    }
+  }, {
+    key: "selectStat",
+    value: function selectStat(date) {
+      this.getClientsByDate(date);
+      var stat = this.stats.find(function (stat) {
+        var d = stat.data.split(' ')[0];
+        return d === date;
+      });
+      this.currentStat = stat;
+      this.clientsToSelect = stat.clientes.split(',');
+    }
+  }]);
+
+  return State;
+}(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "fetchingClients", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return false;
+  }
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "fetchingStats", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return false;
+  }
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "stats", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return [];
+  }
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "currentStat", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return undefined;
+  }
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "currentDate", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return '';
+  }
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "availableDates", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return [];
+  }
+}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "clientsToSelect", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return [];
+  }
+}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "currentClient", [_mobx.observable], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: function initializer() {
+    return '';
+  }
+}), _applyDecoratedDescriptor(_class.prototype, "setCurrentClient", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "setCurrentClient"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "getStats", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "getStats"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "getClientsByDate", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "getClientsByDate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "selectStat", [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, "selectStat"), _class.prototype)), _class);
+var state = new State();
+var _default = state;
+exports.default = _default;
+},{"mobx":"../node_modules/mobx/dist/mobx.esm.js","./../api.js":"api.js","react-toastify":"../node_modules/react-toastify/dist/react-toastify.esm.mjs"}],"components/charts/charts.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.OcurrenciesChart = exports.DailyCallsChart = exports.ClassificationsChart = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _auto = _interopRequireDefault(require("chart.js/auto"));
+
+require("./charts.less");
+
+var _stateGlobal = _interopRequireDefault(require("./../../state/state.global.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var DailyCallsChart = function DailyCallsChart() {
+  var id = Math.random();
+
+  var data = _stateGlobal.default.getDailyCalls();
+
+  (0, _react.useEffect)(function () {
+    var ctx = document.getElementById(id);
+    var myChart = new _auto.default(ctx, {
+      type: 'line',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'Chamadas por dia',
+          data: data.data
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+    return function () {
+      myChart.destroy();
+    };
+  });
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "DailyCallsChart chart",
+    style: {
+      width: "33%"
+    }
+  }, /*#__PURE__*/_react.default.createElement("canvas", {
+    id: id,
+    className: "canvas",
+    width: "100%"
+  }));
+};
+
+exports.DailyCallsChart = DailyCallsChart;
+
+var OcurrenciesChart = function OcurrenciesChart() {
+  var id = Math.random() + 4;
+
+  var data = _stateGlobal.default.getOcurrencies();
+
+  (0, _react.useEffect)(function () {
+    var ctx = document.getElementById(id);
+    var myChart = new _auto.default(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: '',
+          data: data.data,
+          backgroundColor: ['red', 'green', 'blue', 'yellow', 'pink']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    return function () {
+      myChart.destroy();
+    };
+  });
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "OcurrenciesChart chart",
+    style: {
+      width: '33%'
+    }
+  }, /*#__PURE__*/_react.default.createElement("canvas", {
+    id: id,
+    width: "100%"
+  }));
+};
+
+exports.OcurrenciesChart = OcurrenciesChart;
+
+var ClassificationsChart = function ClassificationsChart() {
+  var id = Math.random() + 2;
+
+  var data = _stateGlobal.default.getClassificationsData();
+
+  (0, _react.useEffect)(function () {
+    var ctx = document.getElementById(id);
+    var myChart = new _auto.default(ctx, {
+      type: 'pie',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'Classificação',
+          data: data.data,
+          backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple', 'orange', 'black', 'pink']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+    return function () {
+      myChart.destroy();
+    };
+  });
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "ClassificationsChart chart",
+    style: {
+      width: '33%'
+    }
+  }, /*#__PURE__*/_react.default.createElement("canvas", {
+    id: id,
+    width: "100%"
+  }));
+};
+
+exports.ClassificationsChart = ClassificationsChart;
+},{"react":"../node_modules/react/index.js","chart.js/auto":"../node_modules/chart.js/auto/auto.esm.js","./charts.less":"components/charts/charts.less","./../../state/state.global.js":"state/state.global.js"}],"components/loading/loading.less":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/loading/loading.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SmallLoading = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./loading.less");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SmallLoading = function SmallLoading() {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "SmallLoading"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "spinner"
+  }));
+};
+
+exports.SmallLoading = SmallLoading;
+},{"react":"../node_modules/react/index.js","./loading.less":"components/loading/loading.less"}],"../node_modules/react-toastify/dist/ReactToastify.css":[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -71941,13 +71955,16 @@ var App = (0, _mobxReact.observer)(function () {
   }, []);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "App"
-  }, /*#__PURE__*/_react.default.createElement(_reactToastify.ToastContainer, null), /*#__PURE__*/_react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement(_reactToastify.ToastContainer, {
+    position: "bottom-center"
+  }), /*#__PURE__*/_react.default.createElement("div", {
     className: "filters"
   }, !_stateGlobal.default.fetchingStats ? [/*#__PURE__*/_react.default.createElement("select", {
     value: _stateGlobal.default.currentClient,
     key: "select-client",
     onChange: filterClient
   }, [/*#__PURE__*/_react.default.createElement("option", {
+    key: Math.random(),
     value: "",
     selected: true
   }, "Cliente"), _stateGlobal.default.clientsToSelect.map(function (client, key) {
@@ -72006,7 +72023,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39231" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46089" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
