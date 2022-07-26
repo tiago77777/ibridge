@@ -8,7 +8,7 @@
     "//debug:server": "DEBUG=myapp:* node src/server/server.js",
     "//prod:server": "ENV=production DEBUG=myapp:* node src/server/server.js",
     "test": "parcel serve src/index.html",
-    "vercel:server":"ENV=test node src/server/server.js",
+    "vercel:server": "ENV=test node src/server/server.js",
     "build": "parcel build src/index.html --no-minify"
   },
   "keywords": [],
@@ -28,7 +28,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "sqlite": "^4.1.1",
-    "sqlite3": "^5.0.8",
+    "sqlite3": "^5.0.10",
     "state": "^0.2.0"
   },
   "devDependencies": {
