@@ -8,9 +8,15 @@ dei um git push -f, se quiser reclonar o diretório como um caminho mais fácil,
 
 `npm run build` se quiser
 
-`npm run vercel:server`
+`npm run dev:server`
 
 se tiver firefox:
 `firefox http://localhost:3000`
 
-build script não está funcionando.
+talvez seja necessario instalar sqlite3 ou node-gyp
+
+veja se esses comandos funcionam
+
+`apt install sqlite3` (supondo debi)
+
+`npm i -g node-gyp`
